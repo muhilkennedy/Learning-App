@@ -44,15 +44,15 @@ public class DbDev {
 			logger.debug("Connecting to a selected database..." + DB_URL);
 			logger.debug("Creating tables in given database...");
 			stmt = conn.createStatement();
-			/* List of tables to be created */
-			stmt.executeUpdate(property.getProperty("UserTable"));
-			stmt.executeUpdate(property.getProperty("ADDRESSTABLE"));
+			/* List of tables to be created.
+			 * Maintain the order to avoid key constraint errors */
+			stmt.executeUpdate(property.getProperty("User"));
+			stmt.executeUpdate(property.getProperty("ADDRESS"));
 			stmt.executeUpdate(property.getProperty("MAINCATEGORY"));
 			stmt.executeUpdate(property.getProperty("SUBCATEGORY"));
 			stmt.executeUpdate(property.getProperty("CART"));
 			stmt.executeUpdate(property.getProperty("ORDER"));
 			stmt.executeUpdate(property.getProperty("INVOICE"));
-			stmt.executeUpdate(property.getProperty("ADDRESSTABLE"));
 			stmt.executeUpdate(property.getProperty("VERIFICATION"));
 
 		} catch (Exception se) {

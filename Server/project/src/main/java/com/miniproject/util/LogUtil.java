@@ -18,7 +18,7 @@ public class LogUtil {
 		return logger;
 	}
 
-	public static Logger getLogger(Class<?> class1) {
-		return LoggerFactory.getLogger(class1);
+	public static Logger getLogger(Class<?> className) {
+		return LoggerFactory.getLogger(className);
 	}
 }
