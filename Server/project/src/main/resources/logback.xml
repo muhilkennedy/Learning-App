@@ -12,6 +12,9 @@
    <logger name="com.miniproject" level="debug" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
+    <logger name="org.flywaydb" level="debug">
+    	<appender-ref ref="STDOUT"/>
+    </logger>
     <root level="error">
         <appender-ref ref="STDOUT"/>
     </root>
@@ -35,6 +38,9 @@
     </appender>
     <logger name="com.miniproject" level="debug" additivity="false">
         <appender-ref ref="FILE-ROLLING"/>
+    </logger>
+    <logger name="org.flywaydb" level="debug">
+    	<appender-ref ref="FILE-ROLLING"/>
     </logger>
     <root level="error">
         <appender-ref ref="FILE-ROLLING"/>
