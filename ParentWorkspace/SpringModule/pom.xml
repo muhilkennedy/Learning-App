@@ -97,23 +97,22 @@
 		    <artifactId>spring-social-facebook</artifactId>
 		    <version>2.0.2.RELEASE</version>
 		</dependency>
-		
 		<!-- Spring Security -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-security</artifactId>
-</dependency>
-<!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
-<dependency>
-    <groupId>javax.ws.rs</groupId>
-    <artifactId>javax.ws.rs-api</artifactId>
-    <version>2.0</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.jersey.core</groupId>
-    <artifactId>jersey-common</artifactId>
-    <version>2.22.2</version>
-</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
+		<dependency>
+		    <groupId>javax.ws.rs</groupId>
+		    <artifactId>javax.ws.rs-api</artifactId>
+		    <version>2.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.glassfish.jersey.core</groupId>
+		    <artifactId>jersey-common</artifactId>
+		    <version>2.22.2</version>
+		</dependency>
 
 	</dependencies>
 
