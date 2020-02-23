@@ -1,7 +1,12 @@
 package com.miniproject.service;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 
-public interface LoginService extends UserDetailsService {
+import com.miniproject.model.User;
 
+@Service
+public interface LoginService {
+	User findActiveUser(String email) throws Exception;
+	User findUser(String email) throws Exception;
+	void saveUser(User user) throws Exception;
 }

@@ -12,4 +12,5 @@ export class AuthenticationService {
   getGoolgeURL(){
     return this.http.get(environment.googleLogin);
   }
+
 }

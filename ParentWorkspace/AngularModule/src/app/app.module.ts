@@ -9,6 +9,8 @@ import { LoginComponent } from './components/login/login.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 import { HomeComponent } from './components/home/home/home.component';
 
+import { CookieService } from 'ngx-cookie-service';
+
 
 @NgModule({
   declarations: [
@@ -22,7 +24,7 @@ import { HomeComponent } from './components/home/home/home.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [ CookieService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   //dev auth urls
-  googleLogin : 'http://localhost:8080/googleLogin'
+  googleLogin : 'http://localhost:8080/googleLogin',
+  userData: 'http://localhost:8080/userDetail?'
 };
 
 /*

@@ -14,7 +14,7 @@ import com.miniproject.util.LogUtil;
  */
 @RestController
 public class BaseController {
-
+	
 	/**
 	 * @param request
 	 * @return home page of the application
@@ -26,5 +26,26 @@ public class BaseController {
 		redirectURL.setUrl(request.getRequestURL().toString()+"index.html?status=0");
 		return redirectURL;
 	}
+	
+//	@RequestMapping("/session")
+//	public User test(HttpServletRequest request) {
+//		User se = login.findActiveUser("email");
+//		
+//		return se;
+//	}
+	
+//	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+//	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+//
+//		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+//
+//		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+//
+//		final String token = jwtTokenUtil.generateToken(userDetails);
+//
+//		return ResponseEntity.ok(new JwtResponse(token));
+//	}
+	
+	
 
 }

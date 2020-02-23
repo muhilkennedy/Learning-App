@@ -17,7 +17,7 @@ import com.miniproject.util.LogUtil;
 @SpringBootApplication
 @EntityScan(basePackages = { "com.miniproject" })
 @ComponentScan({"com.miniproject"})
-@EnableJpaRepositories("com.miniproject.repository")
+@EnableJpaRepositories("com.miniproject")
 public class ProjectApplication {
 	public static void main(String[] args) {
 		LogUtil.getLogger(ProjectApplication.class).debug("Starting Project Application");

@@ -1,20 +1,18 @@
 package com.miniproject.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.miniproject.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
+	
+	String findUserQuery = "select user from User user where user.emailId = :emailId and user.active = :active";
 
-//    public static String FindQuery = "select u from userinfo u where u.userid = 1 and u.emailid = :email";
-//    @Query(FindQuery)
-//    User finduser (@Param("email") String email);
+	@Query(findUserQuery)
+	User findUser(@Param("emailId") String emailId, @Param("active") boolean active);
 	
-	
-//	public static String FindQuery = "select u from user u where u.userid = 1";
-//    @Query(FindQuery)
-//    Optional<User> finduser ();
-    
 }

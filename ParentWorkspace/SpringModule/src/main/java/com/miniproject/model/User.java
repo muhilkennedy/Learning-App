@@ -17,9 +17,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
  *
  */
 @Entity
-@Table(name = "user")
-public class User implements Serializable {
-	private static final long serialVersionUID = 1L;
+@Table(name = "USER")
+public class User {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -50,10 +49,9 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(Integer userId, String emailId, String password, String mobile, String role, String firstName,
+	public User(String emailId, String password, String mobile, String role, String firstName,
 			String lastName, boolean active) {
 		super();
-		this.userId = userId;
 		this.emailId = emailId;
 		this.password = password;
 		this.mobile = mobile;
