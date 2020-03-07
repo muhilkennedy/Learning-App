@@ -7,9 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+
+import com.miniproject.util.CommonUtil;
+import com.miniproject.util.LogUtil;
 
 /**
  * @author Muhil Kennedy
@@ -45,12 +49,15 @@ public class User {
 	
 	@Column(name="ACTIVE")
 	private boolean active;
+	
+	@Column(name="LOGINVIA")
+	private String loginVia;
 
 	public User() {
 	}
 
 	public User(String emailId, String password, String mobile, String role, String firstName,
-			String lastName, boolean active) {
+			String lastName, boolean active, String loginVia) {
 		super();
 		this.emailId = emailId;
 		this.password = password;
@@ -59,6 +66,7 @@ public class User {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.active = active;
+		this.loginVia = loginVia;
 	}
 
 	public Integer getUserId() {
@@ -125,4 +133,23 @@ public class User {
 		this.active = active;
 	}
 
+	public String getLoginVia() {
+		return loginVia;
+	}
+
+	public void setLoginVia(String loginVia) {
+		this.loginVia = loginVia;
+	}
+	
+	@PrePersist
+	private void prePersistUser() {
+		LogUtil.getLogger().info("Pre-Persit User Object : " + this.getUserId());
+		if (CommonUtil.isNullOrEmptyString(this.loginVia)) {
+			this.loginVia = CommonUtil.internalUser;
+		}
+		if (CommonUtil.isNullOrEmptyString(this.role)) {
+			this.role = CommonUtil.userPermission;
+		}
+	}
+	
 }

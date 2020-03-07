@@ -1,19 +1,26 @@
 package com.miniproject.serviceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.miniproject.messages.GenericResponse;
+import com.miniproject.messages.Response;
 import com.miniproject.model.User;
 import com.miniproject.repository.UserRepository;
 import com.miniproject.service.LoginService;
+import com.miniproject.util.CommonUtil;
+import com.miniproject.util.LogUtil;
 
 /**
  * @author MuhilKennedy
  *
  */
 @Service
-@Transactional
 public class LoginServiceImpl implements LoginService{
 
 	@Autowired
@@ -21,17 +28,53 @@ public class LoginServiceImpl implements LoginService{
 
 	@Override
 	public User findActiveUser(String email) throws Exception {
-		return userRepository.findUser(email, true);
+		return userRepository.findActiveUser(email, true);
 	}
 
 	@Override
 	public User findUser(String email) throws Exception {
-		return userRepository.findUser(email, false);
+		return userRepository.findUser(email);
 	}
 	
 	@Override
+	@Transactional
 	public void saveUser(User user) throws Exception {
 		userRepository.save(user);
+	}
+
+	@Override
+	public GenericResponse<User> loginUser(String email, String password) throws Exception {
+		GenericResponse<User> response = new GenericResponse<>();
+		List<String> msg = new ArrayList<>();
+		User user = userRepository.findUser(email);
+		if (user == null) {
+			msg.add("User Does Not Exist");
+			response.setErrorMessages(msg);
+			response.setStatus(Response.Status.NOT_FOUND);
+		} else if (BCrypt.checkpw(password, user.getPassword())) {
+			user.setPassword(null);
+			response.setStatus(Response.Status.OK);
+			response.setData(user);
+		} else {
+			msg.add("Password is Incorrect");
+			response.setErrorMessages(msg);
+			response.setStatus(Response.Status.FORBIDDEN);
+		}
+		return response;
+	}
+
+	@Override
+	@Transactional
+	public boolean createUser(User user) {
+		try {
+			String encrptedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(CommonUtil.saltRounds));
+			user.setPassword(encrptedPassword);
+			saveUser(user);
+			return true;
+		} catch (Exception ex) {
+			LogUtil.getLogger(LoginServiceImpl.class).error("createUser : " + ex);
+			return false;
+		}
 	}
 
 }
