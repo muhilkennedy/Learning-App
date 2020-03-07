@@ -3,10 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  //dev auth urls
-  googleLogin : 'http://localhost:8080/googleLogin',
-  userData: 'http://localhost:8080/userDetail?'
+  production: false
 };
 
 /*

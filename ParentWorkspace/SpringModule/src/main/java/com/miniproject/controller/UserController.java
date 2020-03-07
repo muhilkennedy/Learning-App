@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +21,8 @@ import com.miniproject.util.LogUtil;
  *
  */
 @RestController
-public class LoginController {
+@RequestMapping("user")
+public class UserController {
 
 	@Autowired
 	private LoginService login;
@@ -47,4 +50,33 @@ public class LoginController {
 			return response;
 		}
 	}
+	
+	@PostMapping("/login")
+	public GenericResponse<User> getLoginData(@RequestBody User userObj) {
+		GenericResponse<User> response = new GenericResponse<>();
+		try {
+			response = login.loginUser(userObj.getEmailId(), userObj.getPassword());
+		} catch (Exception ex) {
+			LogUtil.getLogger().error("getLoginData : " + ex);
+			List<String> msg = Arrays.asList(ex.getMessage());
+			response.setErrorMessages(msg);
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			return response;
+		}
+	}
+
+	@PostMapping("/create")
+	public GenericResponse<User> insertUser(@RequestBody User userObj) {
+		GenericResponse<User> response = new GenericResponse<>();
+		boolean value = login.createUser(userObj);
+		if (value) {
+			response.setStatus(Response.Status.OK);
+		} else {
+			response.setStatus(Response.Status.ERROR);
+			response.setErrorMessages(Arrays.asList("Error Inserting User"));
+		}
+		return response;
+	}
+	
 }
