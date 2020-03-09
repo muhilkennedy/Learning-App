@@ -149,7 +149,7 @@
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
-					<execution>
+					<!--execution>
 						<id>copy-resources</id>
 						<phase>validate</phase>
 						<goals>
@@ -164,7 +164,7 @@
 								</resource>
 							</resources>
 						</configuration>
-					</execution>
+					</execution-->
 				</executions>
 			</plugin>
 		</plugins>
