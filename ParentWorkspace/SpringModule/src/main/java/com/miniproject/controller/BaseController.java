@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.miniproject.messages.Response;
 import com.miniproject.util.LogUtil;
 
 /**
@@ -19,6 +20,7 @@ public class BaseController {
 	 * @param request
 	 * @return home page of the application
 	 */
+	@Deprecated
 	@RequestMapping("/")
     public RedirectView index(HttpServletRequest request) {
 		RedirectView redirectURL = new RedirectView();
@@ -27,25 +29,12 @@ public class BaseController {
 		return redirectURL;
 	}
 	
-//	@RequestMapping("/session")
-//	public User test(HttpServletRequest request) {
-//		User se = login.findActiveUser("email");
-//		
-//		return se;
-//	}
-	
-//	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-//	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-//
-//		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-//
-//		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-//
-//		final String token = jwtTokenUtil.generateToken(userDetails);
-//
-//		return ResponseEntity.ok(new JwtResponse(token));
-//	}
-	
+	@RequestMapping("/init")
+	public Response init() {
+		Response response = new Response();
+		response.setStatus(Response.Status.OK);
+		return response;
+	}
 	
 
 }
