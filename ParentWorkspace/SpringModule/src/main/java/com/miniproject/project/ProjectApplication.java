@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.miniproject.util.LogUtil;
 
@@ -18,6 +19,7 @@ import com.miniproject.util.LogUtil;
 @EntityScan(basePackages = { "com.miniproject" })
 @ComponentScan({"com.miniproject"})
 @EnableJpaRepositories("com.miniproject")
+@EnableScheduling
 public class ProjectApplication {
 	public static void main(String[] args) {
 		LogUtil.getLogger(ProjectApplication.class).debug("Starting Project Application");
