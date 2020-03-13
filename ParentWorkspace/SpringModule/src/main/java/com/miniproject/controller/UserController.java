@@ -15,6 +15,7 @@ import com.miniproject.messages.Response;
 import com.miniproject.model.User;
 import com.miniproject.service.LoginService;
 import com.miniproject.util.LogUtil;
+import com.miniproject.util.ResponseUtil;
 
 /**
  * @author MuhilKennedy
@@ -33,8 +34,7 @@ public class UserController {
 		try {
 			User user = login.findActiveUser(email);
 			if (user != null) {
-				user.setPassword(null);
-				response.setData(user);
+				response.setData(ResponseUtil.cleanUpUserResponse(user));
 				response.setStatus(Response.Status.OK);
 			} else {
 				List<String> msg = Arrays.asList("User Does Not Exist");

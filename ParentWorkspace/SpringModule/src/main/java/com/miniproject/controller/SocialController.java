@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.google.api.userinfo.GoogleUserInfo;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -25,6 +26,7 @@ import com.miniproject.util.SocialUtil;
  *
  */
 @RestController
+@RequestMapping("social")
 public class SocialController {
 
 	@Autowired

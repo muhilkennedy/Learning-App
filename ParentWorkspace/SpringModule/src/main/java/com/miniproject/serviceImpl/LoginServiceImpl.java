@@ -1,6 +1,7 @@
 package com.miniproject.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.miniproject.messages.GenericResponse;
 import com.miniproject.messages.Response;
 import com.miniproject.model.User;
+import com.miniproject.model.Verification;
 import com.miniproject.repository.UserRepository;
 import com.miniproject.service.LoginService;
 import com.miniproject.util.CommonUtil;
 import com.miniproject.util.LogUtil;
+import com.miniproject.util.ResponseUtil;
 
 /**
  * @author MuhilKennedy
  *
  */
 @Service
-public class LoginServiceImpl implements LoginService{
+public class LoginServiceImpl implements LoginService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -35,7 +38,7 @@ public class LoginServiceImpl implements LoginService{
 	public User findUser(String email) throws Exception {
 		return userRepository.findUser(email);
 	}
-	
+
 	@Override
 	@Transactional
 	public void saveUser(User user) throws Exception {
@@ -54,7 +57,7 @@ public class LoginServiceImpl implements LoginService{
 		} else if (BCrypt.checkpw(password, user.getPassword())) {
 			user.setPassword(null);
 			response.setStatus(Response.Status.OK);
-			response.setData(user);
+			response.setData(ResponseUtil.cleanUpUserResponse(user));
 		} else {
 			msg.add("Password is Incorrect");
 			response.setErrorMessages(msg);
@@ -69,6 +72,7 @@ public class LoginServiceImpl implements LoginService{
 		try {
 			String encrptedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(CommonUtil.saltRounds));
 			user.setPassword(encrptedPassword);
+			user.setVerification(new Verification(user, CommonUtil.generateRandomCode(), new Date()));
 			saveUser(user);
 			return true;
 		} catch (Exception ex) {
