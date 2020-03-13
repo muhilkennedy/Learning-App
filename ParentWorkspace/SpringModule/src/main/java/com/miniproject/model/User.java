@@ -1,63 +1,72 @@
 package com.miniproject.model;
 
-import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.util.CollectionUtils;
 
 import com.miniproject.util.CommonUtil;
 import com.miniproject.util.LogUtil;
 
 /**
- * @author Muhil Kennedy
+ * @author Muhil Kennedy 
  * maps to user table which contains user information.
- *
  */
 @Entity
 @Table(name = "USER")
 public class User {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="USERID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "USERID")
 	private Integer userId;
-	
-	@Column(name="EMAILID")
+
+	@Column(name = "EMAILID")
 	private String emailId;
-	
-	@Column(name="PASSWORD")
+
+	@Column(name = "PASSWORD")
 	private String password;
-	
-	@Column(name="MOBILE")
+
+	@Column(name = "MOBILE")
 	private String mobile;
-	
-	@Column(name="ROLE")
+
+	@Column(name = "ROLE")
 	private String role;
-	
-	@Column(name="FNAME")
+
+	@Column(name = "FNAME")
 	private String firstName;
-	
-	@Column(name="LNAME")
+
+	@Column(name = "LNAME")
 	private String lastName;
-	
-	@Column(name="ACTIVE")
+
+	@Column(name = "ACTIVE")
 	private boolean active;
-	
-	@Column(name="LOGINVIA")
+
+	@Column(name = "LOGINVIA")
 	private String loginVia;
+
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+	private List<Address> address;
+	
+	@OneToOne(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Verification verification;
 
 	public User() {
 	}
 
-	public User(String emailId, String password, String mobile, String role, String firstName,
-			String lastName, boolean active, String loginVia) {
+	public User(String emailId, String password, String mobile, String role, String firstName, String lastName,
+			boolean active, String loginVia) {
 		super();
 		this.emailId = emailId;
 		this.password = password;
@@ -140,7 +149,26 @@ public class User {
 	public void setLoginVia(String loginVia) {
 		this.loginVia = loginVia;
 	}
-	
+
+	public List<Address> getAddress() {
+		return address;
+	}
+
+	public void setAddress(List<Address> address) {
+		this.address = address;
+	}
+
+	public Verification getVerification() {
+		return verification;
+	}
+
+	public void setVerification(Verification verification) {
+		this.verification = verification;
+	}
+
+	/**
+	 * Perform default actions before final persist.
+	 */
 	@PrePersist
 	private void prePersistUser() {
 		LogUtil.getLogger().info("Pre-Persit User Object : " + this.getUserId());
@@ -150,6 +178,11 @@ public class User {
 		if (CommonUtil.isNullOrEmptyString(this.role)) {
 			this.role = CommonUtil.userPermission;
 		}
+		if (!CollectionUtils.isEmpty(this.address)) {
+			this.address.stream().forEach(item -> {
+				item.setUserId(this);
+			});
+		}
 	}
-	
+
 }
