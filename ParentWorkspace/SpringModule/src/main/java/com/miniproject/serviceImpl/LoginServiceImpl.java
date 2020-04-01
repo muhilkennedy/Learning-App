@@ -1,23 +1,27 @@
 package com.miniproject.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.miniproject.messages.GenericResponse;
-import com.miniproject.messages.Response;
 import com.miniproject.model.User;
 import com.miniproject.model.Verification;
 import com.miniproject.repository.UserRepository;
 import com.miniproject.service.LoginService;
+import com.miniproject.service.VerificationService;
 import com.miniproject.util.CommonUtil;
 import com.miniproject.util.LogUtil;
 import com.miniproject.util.ResponseUtil;
+import com.miniproject.util.SocialUtil;
 
 /**
  * @author MuhilKennedy
@@ -26,8 +30,16 @@ import com.miniproject.util.ResponseUtil;
 @Service
 public class LoginServiceImpl implements LoginService {
 
+	private static Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	VerificationService verificationService;
+	
+	@Autowired
+	private SocialUtil socialUtil;
 
 	@Override
 	public User findActiveUser(String email) throws Exception {
@@ -46,24 +58,14 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	@Override
-	public GenericResponse<User> loginUser(String email, String password) throws Exception {
+	public User loginUser(String email, String password) throws Exception {
 		GenericResponse<User> response = new GenericResponse<>();
 		List<String> msg = new ArrayList<>();
 		User user = userRepository.findUser(email);
-		if (user == null) {
-			msg.add("User Does Not Exist");
-			response.setErrorMessages(msg);
-			response.setStatus(Response.Status.NOT_FOUND);
-		} else if (BCrypt.checkpw(password, user.getPassword())) {
-			user.setPassword(null);
-			response.setStatus(Response.Status.OK);
-			response.setData(ResponseUtil.cleanUpUserResponse(user));
-		} else {
-			msg.add("Password is Incorrect");
-			response.setErrorMessages(msg);
-			response.setStatus(Response.Status.FORBIDDEN);
+		if(user != null && BCrypt.checkpw(password, user.getPassword())) {
+			return ResponseUtil.cleanUpUserResponse(user);
 		}
-		return response;
+		return null;
 	}
 
 	@Override
@@ -81,4 +83,27 @@ public class LoginServiceImpl implements LoginService {
 		}
 	}
 
+	@Override
+	public void sendVerification(String emailId, String code, String url) {
+		String htmlBody = socialUtil.verificationEmailHTMLBody(code,
+				socialUtil.generateVerificationURL(url, code, emailId));
+		List<String> emailList = new ArrayList<String>(Arrays.asList(emailId));
+		// Should be threaded in future change.
+		socialUtil.sendEmail(emailList, "Verify your Account", htmlBody, null);
+	}
+
+	@Override
+	@Transactional
+	public boolean verifyUser(String email, String code) {
+		try {
+			User user = findUser(email);
+			if (user != null && code.equals(user.getVerification().getCode())) {
+				user.setActive(true);
+				return true;
+			}
+		} catch (Exception e) {
+			logger.error("verifyUser :: Exception during verifying user - " + e.getMessage());
+		}
+		return false;
+	}
 }

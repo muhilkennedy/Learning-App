@@ -10,7 +10,7 @@ import java.util.List;
 public class GenericResponse<T> extends Response {
 
 	private T data;
-	private List<T> dataList;
+	private List<?> dataList;
 	
 	public T getData() {
 		return data;
@@ -20,11 +20,11 @@ public class GenericResponse<T> extends Response {
 		this.data = data;
 	}
 	
-	public List<T> getDataList() {
+	public List<?> getDataList() {
 		return dataList;
 	}
 	
-	public void setDataList(List<T> dataList) {
+	public void setDataList(List<?> dataList) {
 		this.dataList = dataList;
 	}
 

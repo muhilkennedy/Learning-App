@@ -171,7 +171,7 @@ public class User {
 	 */
 	@PrePersist
 	private void prePersistUser() {
-		LogUtil.getLogger().info("Pre-Persit User Object : " + this.getUserId());
+		LogUtil.getLogger().info("Pre-Persit User Object : " + this.getEmailId());
 		if (CommonUtil.isNullOrEmptyString(this.loginVia)) {
 			this.loginVia = CommonUtil.internalUser;
 		}

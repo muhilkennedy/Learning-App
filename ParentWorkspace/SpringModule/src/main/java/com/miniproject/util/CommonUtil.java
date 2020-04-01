@@ -1,7 +1,9 @@
 package com.miniproject.util;
 
-public class CommonUtil {
+import org.springframework.beans.factory.annotation.Value;
 
+public class CommonUtil {
+	
 	public static final String userPermission = "USER";
 	public static final String adminPermission = "ADMIN";
 	public static final boolean active = true;
@@ -13,6 +15,8 @@ public class CommonUtil {
 	public static final int maxVerificationTime = 24;
 	private static final int randomCodeLength = 8;
 	private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
+	public static final String verificationPath = "/verifyUser";
+	public static final String userCreationPath = "/createUser";
 
 	public static boolean isNullOrEmptyString(String value) {
 		if (value != null && !(value.length() <= 0))
