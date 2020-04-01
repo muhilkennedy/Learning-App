@@ -173,10 +173,10 @@ public class User {
 	private void prePersistUser() {
 		LogUtil.getLogger().info("Pre-Persit User Object : " + this.getEmailId());
 		if (CommonUtil.isNullOrEmptyString(this.loginVia)) {
-			this.loginVia = CommonUtil.internalUser;
+			this.loginVia = CommonUtil.Key_internalUser;
 		}
 		if (CommonUtil.isNullOrEmptyString(this.role)) {
-			this.role = CommonUtil.userPermission;
+			this.role = CommonUtil.Key_userPermission;
 		}
 		if (!CollectionUtils.isEmpty(this.address)) {
 			this.address.stream().forEach(item -> {

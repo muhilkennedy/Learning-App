@@ -14,13 +14,17 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/**
+ * @author Muhil Kenenedy
+ * Java Web Token(JWT) generationa and verification implementation.
+ */
 @Component
 public class JWTUtil {
 
 	//2hours validity
 	public static final long JWT_TOKEN_VALIDITY = 2 * 60 * 60;
 
-	@Value("${jwt.secret}")
+	@Value("${spring.security.jwt.secret}")
 	private String secret;
 
 	//retrieve email from jwt token
