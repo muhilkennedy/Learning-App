@@ -9,5 +9,5 @@ import com.miniproject.model.Verification;
 @Service
 public interface VerificationService {
 	List<Verification> getAllVerifications();
-	boolean removeVerification(int id);
+	void removeVerification(Verification verification);
 }

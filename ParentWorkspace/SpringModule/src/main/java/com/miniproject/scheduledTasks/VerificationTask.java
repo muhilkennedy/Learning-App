@@ -15,6 +15,10 @@ import com.miniproject.service.VerificationService;
 import com.miniproject.util.CommonUtil;
 import com.miniproject.util.LogUtil;
 
+/**
+ * @author Muhil Kennedy
+ * Task runs every one hour and checks for ver
+ */
 @Component
 public class VerificationTask implements ScheduledTask {
 
@@ -30,7 +34,7 @@ public class VerificationTask implements ScheduledTask {
 			verificationList.stream().forEach(item -> {
 				if (checkTimeLapsed(item)) {
 					LogUtil.getLogger().info("Verification task removed : " + item.getId());
-					verificationService.removeVerification(item.getId());
+					verificationService.removeVerification(item);
 				}
 			});
 		}
