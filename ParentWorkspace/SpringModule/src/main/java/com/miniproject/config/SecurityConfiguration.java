@@ -2,13 +2,14 @@ package com.miniproject.config;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -19,8 +20,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Value("${cors.allowed-origin}")
 	private String allowedOrigin;
+
+	// Injected here because spring does not manage filter bean registration.
+	@Autowired
+	private SecurityFilter securityFilter;
 	
-	/* (non-Javadoc)
+	/* 
 	 * overrides spring default /login authentication.
 	 */
 	@Override
@@ -28,9 +33,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.cors().and()
         	.authorizeRequests().antMatchers("/**").permitAll().and().headers().frameOptions().disable();
-        http.addFilterAfter(
-                new SecurityFilter(), BasicAuthenticationFilter.class);
     }
+	
+	@Bean
+	public FilterRegistrationBean<SecurityFilter> SecurityFilterRegistration() {
+	    FilterRegistrationBean<SecurityFilter> registration = new  FilterRegistrationBean<SecurityFilter>();
+	    registration.setFilter(securityFilter);
+	    registration.addUrlPatterns("/user/*");
+	    return registration;
+	}
 	
 	@Bean
     CorsConfigurationSource corsConfigurationSource() 

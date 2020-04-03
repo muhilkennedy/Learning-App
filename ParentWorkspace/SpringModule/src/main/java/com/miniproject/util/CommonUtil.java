@@ -1,18 +1,25 @@
 package com.miniproject.util;
 
-public class CommonUtil {
+import org.springframework.beans.factory.annotation.Value;
 
-	public static final String userPermission = "USER";
-	public static final String adminPermission = "ADMIN";
-	public static final boolean active = true;
-	public static final boolean inactive = false;
-	public static final String googleUser = "GOOGLE";
-	public static final String facebookUser = "FACEBOOK";
-	public static final String internalUser = "INTERNAL";
+public class CommonUtil {
+	
+	public static final String Key_userPermission = "USER";
+	public static final String Key_adminPermission = "ADMIN";
+	public static final boolean Key_active = true;
+	public static final boolean Key_inactive = false;
+	public static final String Key_googleUser = "GOOGLE";
+	public static final String Key_facebookUser = "FACEBOOK";
+	public static final String Key_internalUser = "INTERNAL";
 	public static final int saltRounds = 5;
 	public static final int maxVerificationTime = 24;
 	private static final int randomCodeLength = 8;
 	private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
+	public static final String verificationPath = "/verifyUser";
+	public static final String userCreationPath = "/createUser";
+	public static final String Key_code = "code";
+	public static final String Key_email = "email";
+	 
 
 	public static boolean isNullOrEmptyString(String value) {
 		if (value != null && !(value.length() <= 0))

@@ -75,8 +75,8 @@ public class SocialController {
 			//persist user details in db if logging in for first time.
 			User user = loginService.findActiveUser(googleUser.getEmail());
 			if(user == null) {
-				loginService.saveUser(new User(googleUser.getEmail(), null, null, CommonUtil.userPermission,
-						googleUser.getFirstName(), googleUser.getLastName(), CommonUtil.active, CommonUtil.googleUser));
+				loginService.saveUser(new User(googleUser.getEmail(), null, null, CommonUtil.Key_userPermission,
+						googleUser.getFirstName(), googleUser.getLastName(), CommonUtil.Key_active, CommonUtil.Key_googleUser));
 			}
 		} catch (Exception ex) {
 			url = "http://localhost:8080/index.html?status=2&msg=" + ex.getMessage();
