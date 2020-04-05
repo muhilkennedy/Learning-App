@@ -7,9 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +25,6 @@ import com.miniproject.util.LogUtil;
  * @author muhilkennedy
  *
  */
-@CrossOrigin
 @RestController
 @RequestMapping("base")
 public class BaseController {
@@ -46,12 +42,12 @@ public class BaseController {
 		return response;
 	}
 	
+
 	/**
 	 * @param userObj user details.
 	 * @param request
 	 * @return JWT token for authenticated user.
 	 */
-
 	@RequestMapping(value = "/userAuthentication", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<JWTResponse> getLoginData(@RequestBody User userObj, HttpServletRequest request) {
 		GenericResponse<JWTResponse> response = new GenericResponse<>();
@@ -96,6 +92,7 @@ public class BaseController {
 		}
 		return response;
 	}
+
 
 	/**
 	 * @param email
