@@ -16,7 +16,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
  * @author Muhil Kenenedy
- * Java Web Token(JWT) generationa and verification implementation.
+ * Java Web Token(JWT) generation and verification implementation.
  */
 @Component
 public class JWTUtil {
@@ -59,6 +59,7 @@ public class JWTUtil {
 	 */
 	public String generateToken(User userDetails) {
 		Map<String, Object> claims = new HashMap<>();
+		claims.put("scope", userDetails.getRole());
 		//we can add more details about user in future in Claims map if needed.
 		return doGenerateToken(claims, userDetails.getEmailId());
 	}

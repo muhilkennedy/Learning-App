@@ -17,7 +17,7 @@ import com.miniproject.util.LogUtil;
 
 /**
  * @author Muhil Kennedy
- * Task runs every one hour and checks for ver
+ * Task runs every one five minutes and checks for verification exceeds an hour.
  */
 @Component
 public class VerificationTask implements ScheduledTask {
@@ -25,7 +25,8 @@ public class VerificationTask implements ScheduledTask {
 	@Autowired
 	VerificationService verificationService;
 
-	@Scheduled(cron = "0 0 * * * *")
+	//cron = sec min hour day mon dayOfWeek year.
+	@Scheduled(cron = " 0 0/5 * * * * ")
 	@Override
 	public void execute() {
 		LogUtil.getLogger().info("Scheduled Task Executed : " + new Date());
