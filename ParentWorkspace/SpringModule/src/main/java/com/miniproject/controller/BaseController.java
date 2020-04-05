@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +28,7 @@ import com.miniproject.util.LogUtil;
  * @author muhilkennedy
  *
  */
+@CrossOrigin
 @RestController
 @RequestMapping("base")
 public class BaseController {
@@ -42,6 +46,12 @@ public class BaseController {
 		return response;
 	}
 	
+	/**
+	 * @param userObj user details.
+	 * @param request
+	 * @return JWT token for authenticated user.
+	 */
+
 	@RequestMapping(value = "/userAuthentication", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<JWTResponse> getLoginData(@RequestBody User userObj, HttpServletRequest request) {
 		GenericResponse<JWTResponse> response = new GenericResponse<>();
@@ -52,9 +62,10 @@ public class BaseController {
 				token.setToken(jwtTokenUtil.generateToken(user));
 				token.setExpiry(jwtTokenUtil.getExpirationDateFromToken(token.getToken()).getTime());
 				response.setData(token);
+				response.setDataList(Arrays.asList(user));
 				response.setStatus(Response.Status.OK);
 			} else {
-				response.setErrorMessages(Arrays.asList("User Credentials Incorrect"));
+				response.setErrorMessages(Arrays.asList("Invalid User Credentials"));
 				response.setStatus(Response.Status.FORBIDDEN);
 			}
 		} catch (Exception ex) {
@@ -67,6 +78,11 @@ public class BaseController {
 		}
 	}
 	
+	/**
+	 * @param userObj user details.
+	 * @param request
+	 * @return user details if successfully inserted.
+	 */
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<User> insertUser(@RequestBody User userObj, HttpServletRequest request) {
 		GenericResponse<User> response = new GenericResponse<>();
@@ -81,6 +97,11 @@ public class BaseController {
 		return response;
 	}
 
+	/**
+	 * @param email
+	 * @param code
+	 * @return verification status message.
+	 */
 	@RequestMapping(value = "/verifyUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	 public String verifyUser(@RequestParam(value = "email", required = true) String email, @RequestParam(value = "code", required = true) String code) {
 		LogUtil.getLogger().debug("verifyUser :: Verication for " + email);
