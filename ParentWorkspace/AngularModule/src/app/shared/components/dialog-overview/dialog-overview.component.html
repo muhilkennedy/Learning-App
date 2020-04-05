@@ -1,0 +1,47 @@
+
+<div class="center">
+  <div class="container">
+      <ngx-loading [show]="loading"></ngx-loading>
+      <div class="row">
+        <h2 style="text-align:center">User Sign In</h2>
+        <div class="vl">
+          <span class="vl-innertext">or</span>
+        </div>
+  
+        <div class="col">
+          <button mat-button class="google btn" (click)="redirectToGoogleLogin()">
+            <mat-icon >group</mat-icon>
+            Login with Google+
+          </button>
+        </div>
+  
+        <div class="col">
+          <input matInput #username type="text" name="uname" placeholder="Username" required>
+          <input matInput #password type="password" name="pass" placeholder="Password" required>
+          <mat-error *ngIf="hasErrorMsg()">{{errorMsg}}</mat-error>
+          <button mat-button class="login btn" (click)="login()">
+            <mat-icon >person</mat-icon>
+            Sign In
+          </button>
+        </div>  
+      </div>
+
+  </div>
+  
+  <div class="bottom-container">
+    <div class="row">
+      <div class="col">
+        <button mat-button>
+          <mat-icon >person_add</mat-icon>
+          Sign Up
+        </button>
+      </div>
+      <div class="col">
+        <button mat-button>
+          <mat-icon >mood_bad</mat-icon>
+          Forgot Password
+        </button>
+      </div>
+    </div>
+  </div>
+  </div>
