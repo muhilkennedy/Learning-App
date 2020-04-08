@@ -3,7 +3,6 @@ package com.miniproject.serviceImpl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +27,13 @@ public class VerificationServiceImpl implements VerificationService {
 	}
 
 	@Override
-	@Modifying
 	public void removeVerification(Verification verification) {
 		verificationRepo.delete(verification);
 	}
-	
+
+	@Override
+	public void saveVerification(Verification verify) throws Exception {
+		verificationRepo.save(verify);		
+	}
+
 }

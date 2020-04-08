@@ -3,11 +3,11 @@ package com.miniproject.serviceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.api.impl.GoogleTemplate;
-import org.springframework.social.google.api.plus.Person;
 import org.springframework.social.google.api.userinfo.GoogleUserInfo;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.stereotype.Service;
+
 import com.miniproject.service.GoogleService;
 
 @Service

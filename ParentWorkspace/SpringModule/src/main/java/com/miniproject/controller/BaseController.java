@@ -18,6 +18,8 @@ import com.miniproject.messages.JWTResponse;
 import com.miniproject.messages.Response;
 import com.miniproject.model.User;
 import com.miniproject.service.LoginService;
+import com.miniproject.service.VerificationService;
+import com.miniproject.util.CommonUtil;
 import com.miniproject.util.JWTUtil;
 import com.miniproject.util.LogUtil;
 
@@ -31,6 +33,9 @@ public class BaseController {
 	
 	@Autowired
 	private LoginService login;
+	
+	@Autowired
+	VerificationService verificationService;
 	
 	@Autowired
 	private JWTUtil jwtTokenUtil;
@@ -84,7 +89,8 @@ public class BaseController {
 		GenericResponse<User> response = new GenericResponse<>();
 		boolean value = login.createUser(userObj);
 		if (value) {
-			login.sendVerification(userObj.getEmailId(), userObj.getVerification().getCode(), request.getRequestURL().toString());
+			login.sendVerification(userObj.getEmailId(), userObj.getVerification().getCode(),
+					request.getRequestURL().toString(), false);
 			response.setStatus(Response.Status.OK);
 		} else {
 			response.setStatus(Response.Status.ERROR);
@@ -99,7 +105,8 @@ public class BaseController {
 	 * @return verification status message.
 	 */
 	@RequestMapping(value = "/verifyUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	 public String verifyUser(@RequestParam(value = "email", required = true) String email, @RequestParam(value = "code", required = true) String code) {
+	public String verifyUser(@RequestParam(value = "email", required = true) String email,
+			@RequestParam(value = "code", required = true) String code) {
 		LogUtil.getLogger().debug("verifyUser :: Verication for " + email);
 		try {
 			if (login.verifyUser(email, code)) {
@@ -110,6 +117,59 @@ public class BaseController {
 		} catch (Exception ex) {
 			return ex.getMessage();
 		}
+	}
+	
+	/**
+	 * @param email
+	 * @return verification code status
+	 */
+	@RequestMapping(value = "/sendVerification", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public GenericResponse<String> sendVerification(@RequestParam(value = "emailId", required = true) String email) {
+		GenericResponse<String> response = new GenericResponse<>();
+		LogUtil.getLogger().debug("sendVerification :: Re-Verication for " + email);
+		try {
+			User user = login.findUser(email);
+			if(user != null) {
+				login.createUserVerification(user);
+				response.setStatus(Response.Status.OK);
+				response.setData("Email Sent Successfully");
+			}
+			else {
+				response.setStatus(Response.Status.NOT_FOUND);
+				response.setData("User Does not Exists");
+			}
+			
+		} catch (Exception ex) {
+			LogUtil.getLogger().debug("sendVerification :: Exception - " + ex);
+			response.setStatus(Response.Status.ERROR);
+			response.setErrorMessages(Arrays.asList("Error Sending Verification Code"));
+		}
+		return response;
+	}
+	
+	/**
+	 * @param userObj
+	 * @return status for user password update
+	 */
+	@RequestMapping(value = "/updatePassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public GenericResponse<String> updatePassword(@RequestBody User userObj) {
+		GenericResponse<String> response = new GenericResponse<>();
+		LogUtil.getLogger().debug("verifyUser :: Verication for " + userObj.getEmailId());
+		try {
+			if (login.verifyUser(userObj.getEmailId(), userObj.getVerification().getCode())) {
+				login.updateUserPassword(userObj, userObj.getPassword());
+				response.setData("Account verification Successfull...Please Login again");
+				response.setStatus(Response.Status.OK);
+			} else {
+				response.setData("Account verification failed");
+				response.setStatus(Response.Status.ERROR);
+			}
+		} catch (Exception ex) {
+			LogUtil.getLogger().debug("sendVerification :: Exception - " + ex);
+			response.setStatus(Response.Status.ERROR);
+			response.setErrorMessages(Arrays.asList("Error Sending Verification Code"));
+		}
+		return response;
 	}
 
 }

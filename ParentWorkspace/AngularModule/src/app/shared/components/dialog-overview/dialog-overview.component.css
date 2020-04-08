@@ -5,7 +5,11 @@ body {
   * {
     box-sizing: border-box;
   }
-  
+
+.fullWidth{
+  width: 100%;
+}
+
 .center{
     position: absolute;
     left: 50%;
@@ -41,8 +45,8 @@ body {
     opacity: 1;
   }
   
-  .twitter {
-    background-color: #55ACEE;
+  .facebook {
+    background-color: #3b5898;
     color: white;
   }
   
@@ -89,8 +93,16 @@ body {
     position: absolute;
     left: 50%;
     transform: translate(-50%);
-    border: 2px solid #ddd;
-    height: 175px;
+    border: 2px solid tan;
+    height: 250px;
+  }
+
+  .vl-Signup {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    border: 2px solid tan;
+    height: 350px;
   }
   
   /* text inside the vertical line */
@@ -131,4 +143,22 @@ body {
       display: block;
       text-align: center;
     }
+  }
+
+
+  .plainbtn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    margin: 5px 0;
+    opacity: 0.85;
+    display: inline-block;
+    font-size: 17px;
+    line-height: 20px;
+    text-decoration: none; /* remove underline from anchors */
+  }
+
+  .plainbtn:hover {
+    background-color: #d27805;
   }
