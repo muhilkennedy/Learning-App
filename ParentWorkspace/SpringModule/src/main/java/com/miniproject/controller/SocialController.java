@@ -17,6 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.miniproject.messages.Response;
 import com.miniproject.messages.SocialResponse;
 import com.miniproject.model.User;
+import com.miniproject.service.FacebookService;
 import com.miniproject.service.GoogleService;
 import com.miniproject.service.LoginService;
 import com.miniproject.util.CommonUtil;
@@ -37,6 +38,9 @@ public class SocialController {
 	private GoogleService googleService;
 	
 	@Autowired
+	private FacebookService facebookService;
+	
+	@Autowired
 	private LoginService loginService;
 	
 	@Autowired
@@ -46,7 +50,7 @@ public class SocialController {
 	private ConfigUtil configUtil;
 
 	/**
-	 * @return redirect URL for goole login
+	 * @return redirect URL for google login
 	 */
 	@GetMapping(value = "/googleLogin")
 	public SocialResponse googleLogin() {
@@ -97,6 +101,30 @@ public class SocialController {
 			redirectURL.setUrl(url);
 			return redirectURL;
 		}
+	}
+	
+	@GetMapping(value = "/facebookLogin")
+	public SocialResponse faceBook() {
+		String url = facebookService.facebookLogin();
+		SocialResponse response = new SocialResponse();
+		if (url != null) {
+			response.setStatus(Response.Status.OK);
+			response.setURL(url);
+		} else {
+			List<String> msg = new ArrayList<>();
+			msg.add("Google Redirect URL is NOT GENERATED");
+			response.setErrorMessages(msg);
+			response.setStatus(Response.Status.ERROR);
+		}
+		return response;
+	}
+
+	@GetMapping(value = "/facebook")
+	public RedirectView faceabookData(@RequestParam("code") String code) {
+		RedirectView redirectURL = new RedirectView();
+		System.out.println("####redirected");
+		redirectURL.setUrl("");
+		return redirectURL;
 	}
 	
 	public String addParamsToUrl(String url, String token) throws URISyntaxException {
