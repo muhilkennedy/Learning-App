@@ -48,6 +48,7 @@ import { DialogOverviewComponent } from './shared/components/dialog-overview/dia
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 import { CookieService } from 'ngx-cookie-service';
 import { AllCapsPipe } from './shared/pipes/all-caps.pipe';
+import { RedirectComponent } from './components/redirect/redirect.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { AllCapsPipe } from './shared/pipes/all-caps.pipe';
     AboutComponent,
     LoginDialogComponent,
     DialogOverviewComponent,
-    AllCapsPipe
+    AllCapsPipe,
+    RedirectComponent
   ],
   imports: [
     BrowserModule,
