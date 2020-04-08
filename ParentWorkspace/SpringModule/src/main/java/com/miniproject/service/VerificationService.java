@@ -10,4 +10,5 @@ import com.miniproject.model.Verification;
 public interface VerificationService {
 	List<Verification> getAllVerifications();
 	void removeVerification(Verification verification);
+	void saveVerification(Verification verify) throws Exception;
 }

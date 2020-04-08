@@ -1,7 +1,5 @@
 package com.miniproject.util;
 
-import org.springframework.beans.factory.annotation.Value;
-
 public class CommonUtil {
 	
 	public static final String Key_userPermission = "USER";
@@ -12,7 +10,7 @@ public class CommonUtil {
 	public static final String Key_facebookUser = "FACEBOOK";
 	public static final String Key_internalUser = "INTERNAL";
 	public static final int saltRounds = 5;
-	public static final int maxVerificationTime = 24;
+	public static final int maxVerificationTime = 1;
 	private static final int randomCodeLength = 8;
 	private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
 	public static final String verificationPath = "/verifyUser";

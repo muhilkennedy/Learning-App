@@ -12,6 +12,8 @@ public interface LoginService {
 	void saveUser(User user) throws Exception;
 	User loginUser(String email, String password) throws Exception;
 	boolean createUser(User user);
-	void sendVerification(String emailId, String code, String string);
+	void sendVerification(String emailId, String code, String string, boolean onlyCode);
 	boolean verifyUser(String email, String code);
+	void createUserVerification(User user) throws Exception;
+	void updateUserPassword(User user, String password) throws Exception;
 }

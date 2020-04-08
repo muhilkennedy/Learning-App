@@ -59,12 +59,17 @@ public class SocialUtil {
 	}
 
 	public String verificationEmailHTMLBody(String code, String url) {
+		String body = null;
 		Element h1Element = new Element("h1");
 		h1Element.text("VERIFICATION CODE - " + code);
-		Element anchorElement = new Element("a");
-		anchorElement.attr("href", url);
-		anchorElement.text("Click here to verify your Accout");
-		return h1Element.outerHtml() + "\n" + anchorElement.outerHtml();
+		body = h1Element.outerHtml();
+		if(url != null) {
+			Element anchorElement = new Element("a");
+			anchorElement.attr("href", url);
+			anchorElement.text("Click here to verify your Accout");
+			body = h1Element.outerHtml() + "\n" + anchorElement.outerHtml();
+		}
+		return body;
 	}
 
 	/**
@@ -74,54 +79,57 @@ public class SocialUtil {
 	 * @param attachment file
 	 */
 	public void sendEmail(List<String> recipientEmail, String subject, String body, File attachment) {
-		// Set system properties
-		Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.socketFactory.port", "465");
-		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.port", "465");
+		if (configUtil.isMailingServiceEnabled()) {
+			// Set system properties
+			Properties props = new Properties();
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.socketFactory.port", "465");
+			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.port", "465");
 
-		// Make sure the used dev email must have Allow less secure apps option enabled.
-		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(configUtil.getSenderGmailId(), configUtil.getSenderGmailPassword());
-			}
-		});
-
-		try {
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(configUtil.getSenderGmailId()));
-			message.setSubject(configUtil.getApplicationName() + " : " + subject);
-			Multipart multipartObject = new MimeMultipart();
-			// Creating first MimeBodyPart object which contains body text.
-			InternetHeaders headers = new InternetHeaders();
-			headers.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_HTML_VALUE);
-			BodyPart bodyText = new MimeBodyPart(headers, body.getBytes(StandardCharsets.UTF_8.name()));
-			multipartObject.addBodyPart(bodyText);
-			// Creating second MimeBodyPart object which contains attachment.
-			if (attachment != null) {
-				BodyPart fileBodyPart = new MimeBodyPart();
-				DataSource source = new FileDataSource(attachment);
-				fileBodyPart.setDataHandler(new DataHandler(source));
-				fileBodyPart.setFileName(attachment.getName());
-				multipartObject.addBodyPart(fileBodyPart);
-			}
-			// Attach body text and file attachment to the email.
-			message.setContent(multipartObject, MediaType.TEXT_HTML_VALUE);
-			recipientEmail.stream().forEach(recipient -> {
-				try {
-					message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-					logger.debug("sendEmail :: Sending email to Recipient - " + recipient);
-					Transport.send(message);
-					logger.debug("sendEmail :: Email sent Successfully to Recipient - " + recipient);
-				} catch (Exception ex) {
-					logger.debug("sendEmail :: Error sending mail to Recipient - " + recipient);
+			// Make sure the used dev email must have Allow less secure apps option enabled.
+			Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(configUtil.getSenderGmailId(),
+							configUtil.getSenderGmailPassword());
 				}
 			});
 
-		} catch (Exception e) {
-			logger.error("sendEmail :: Sending email to Recipient - " + e);
+			try {
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress(configUtil.getSenderGmailId()));
+				message.setSubject(configUtil.getApplicationName() + " : " + subject);
+				Multipart multipartObject = new MimeMultipart();
+				// Creating first MimeBodyPart object which contains body text.
+				InternetHeaders headers = new InternetHeaders();
+				headers.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_HTML_VALUE);
+				BodyPart bodyText = new MimeBodyPart(headers, body.getBytes(StandardCharsets.UTF_8.name()));
+				multipartObject.addBodyPart(bodyText);
+				// Creating second MimeBodyPart object which contains attachment.
+				if (attachment != null) {
+					BodyPart fileBodyPart = new MimeBodyPart();
+					DataSource source = new FileDataSource(attachment);
+					fileBodyPart.setDataHandler(new DataHandler(source));
+					fileBodyPart.setFileName(attachment.getName());
+					multipartObject.addBodyPart(fileBodyPart);
+				}
+				// Attach body text and file attachment to the email.
+				message.setContent(multipartObject, MediaType.TEXT_HTML_VALUE);
+				recipientEmail.stream().forEach(recipient -> {
+					try {
+						message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+						logger.debug("sendEmail :: Sending email to Recipient - " + recipient);
+						Transport.send(message);
+						logger.debug("sendEmail :: Email sent Successfully to Recipient - " + recipient);
+					} catch (Exception ex) {
+						logger.debug("sendEmail :: Error sending mail to Recipient - " + recipient);
+					}
+				});
+
+			} catch (Exception e) {
+				logger.error("sendEmail :: Sending email to Recipient - " + e);
+			}
 		}
 	}
 

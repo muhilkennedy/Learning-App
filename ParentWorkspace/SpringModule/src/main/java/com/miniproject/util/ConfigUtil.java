@@ -25,6 +25,12 @@ public class ConfigUtil {
 	@Value("${spring.social.gmail.password}")
 	private String senderGmailPassword;
 	
+	@Value("${angular.ui.host}")
+	private String angularUiHost;
+	
+	@Value("${spring.social.gmail.enable-mailing}")
+	private boolean mailingService;
+	
 	public boolean isProdDeploymentMode() {
 		return ("prod".equals(deploymentMode));
 	}
@@ -45,4 +51,11 @@ public class ConfigUtil {
 		return appName;
 	}
 	
+	public String uiHost() {
+		return angularUiHost;
+	}
+	
+	public boolean isMailingServiceEnabled() {
+		return mailingService;
+	}
 }
