@@ -19,7 +19,7 @@ import com.miniproject.messages.Response;
 import com.miniproject.model.User;
 import com.miniproject.service.LoginService;
 import com.miniproject.service.VerificationService;
-import com.miniproject.util.CommonUtil;
+import com.miniproject.util.ConfigUtil;
 import com.miniproject.util.JWTUtil;
 import com.miniproject.util.LogUtil;
 
@@ -38,11 +38,15 @@ public class BaseController {
 	VerificationService verificationService;
 	
 	@Autowired
+	ConfigUtil configUtil;
+	
+	@Autowired
 	private JWTUtil jwtTokenUtil;
 	
 	@RequestMapping("/ping")
-	public Response init() {
-		Response response = new Response();
+	public GenericResponse init() {
+		GenericResponse response = new GenericResponse();
+		response.setData(configUtil.getApplicationName());
 		response.setStatus(Response.Status.OK);
 		return response;
 	}
