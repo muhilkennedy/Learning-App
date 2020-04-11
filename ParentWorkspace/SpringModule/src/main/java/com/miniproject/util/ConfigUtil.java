@@ -30,7 +30,7 @@ public class ConfigUtil {
 	
 	@Value("${spring.social.gmail.enable-mailing}")
 	private boolean mailingService;
-	
+
 	public boolean isProdDeploymentMode() {
 		return ("prod".equals(deploymentMode));
 	}
