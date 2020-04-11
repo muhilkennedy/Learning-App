@@ -4,15 +4,15 @@
     <button mat-icon-button>
       <mat-icon (click)="toggle()">menu</mat-icon>
     </button>
-    <h1>NuttyShop</h1>
+    <h1>{{appName}}</h1>
     <span class="menu-spacer"></span>
     <div>
       <a mat-button [routerLink]="'/about'"> About </a>
     </div>
     <!-- fill up spaces in-between -->
     <span class="spacer"></span>
-    <button mat-button>
-      <mat-icon (click)="cart()" >add_shopping_cart</mat-icon>
+    <button mat-button (click)="cart()">
+      <mat-icon>shopping_cart</mat-icon>
       cart
     </button>
 
