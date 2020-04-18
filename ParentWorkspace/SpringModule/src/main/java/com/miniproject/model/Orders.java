@@ -36,11 +36,7 @@ public class Orders {
 	@Column(name = "ORDERDATE")
 	private Date orderDate;
 	
-	
-
-	public Orders(Integer orderId, User userId, String status, Date orderDate) {
-		super();
-		this.orderId = orderId;
+	public Orders( User userId, String status, Date orderDate) {
 		this.userId = userId;
 		this.status = status;
 		this.orderDate = orderDate;

@@ -28,7 +28,6 @@ public class Orderdetail {
 	private Integer quantity;
 
 	public Orderdetail(Orders orderId, Item itemId, Integer quantity) {
-		super();
 		this.orderId = orderId;
 		this.itemId = itemId;
 		this.quantity = quantity;

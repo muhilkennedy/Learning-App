@@ -46,10 +46,14 @@ public class Item {
 	@Column(name = "OFFER")
 	private BigDecimal offer;
 	
-	public Item(Integer itemId, Category cId, String item, String brandName, BigDecimal cost, String measure,
+	@Column(name = "IMAGE")
+	private Blob image;
+	
+	@Column(name = "ACTIVE")
+	private boolean active;
+	
+	public Item( Category cId, String item, String brandName, BigDecimal cost, String measure,
 			BigDecimal offer, Blob image) {
-		super();
-		this.itemId = itemId;
 		this.cId = cId;
 		this.item = item;
 		this.brandName = brandName;
@@ -58,9 +62,14 @@ public class Item {
 		this.offer = offer;
 		this.image = image;
 	}
+	
+	public boolean isActive() {
+		return active;
+	}
 
-	@Column(name = "IMAGE")
-	private Blob image;
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	public Integer getItemId() {
 		return itemId;

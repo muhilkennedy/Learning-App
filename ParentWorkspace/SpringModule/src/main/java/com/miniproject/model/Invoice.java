@@ -26,7 +26,6 @@ public class Invoice {
 	private Blob document;
 
 	public Invoice(Orders orderId, Blob document) {
-		super();
 		this.orderId = orderId;
 		this.document = document;
 	}

@@ -32,7 +32,6 @@ public class Cart {
 	
 
 	public Cart(User userId, Item itemId, Integer quantity) {
-		super();
 		this.userId = userId;
 		this.itemId = itemId;
 		this.quantity = quantity;
