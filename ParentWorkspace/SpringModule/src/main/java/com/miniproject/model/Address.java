@@ -11,8 +11,7 @@ import javax.persistence.Table;
 
 /**
  * @author MuhilKennedy
- *
- *         maps with user table with many to one cardinality.
+ * maps with user table with many to one cardinality.
  */
 @Entity
 @Table(name = "ADDRESS")
@@ -40,7 +39,6 @@ public class Address {
 	}
 
 	public Address(User userId, String street, String city, String pin) {
-		super();
 		this.userId = userId;
 		this.street = street;
 		this.city = city;

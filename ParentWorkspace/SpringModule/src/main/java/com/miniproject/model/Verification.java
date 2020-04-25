@@ -41,7 +41,6 @@ public class Verification {
 	public Verification() {}
 	
 	public Verification(User userId, String code, Date timeCreated) {
-		super();
 		this.userId = userId;
 		this.code = code;
 		this.timeCreated = timeCreated;

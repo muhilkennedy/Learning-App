@@ -2,35 +2,50 @@ package com.miniproject.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * @author Mohaneswaran
- *
- *         maps with order and item table with many to one cardinality.
+ * @author Mohan
+ * maps to orders table with many to one cardinality.
  */
 @Entity
 @Table(name = "ORDERDETAIL")
+public class OrderDetail {
 
-public class Orderdetail {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ORDERDETAILID")
+	private Integer orderDetailId;
 	
-	@ManyToMany
+	@ManyToOne
 	@JoinColumn(name = "ORDERID", nullable = false)
 	private Orders orderId;
 	
-	@ManyToMany
-	@JoinColumn(name = "ITEMID", nullable = false)
-	private Item itemId;
+	@Column(name = "ITEMID")
+	private Integer itemId;
 	
 	@Column(name = "QUANTITY")
 	private Integer quantity;
 
-	public Orderdetail(Orders orderId, Item itemId, Integer quantity) {
+	public OrderDetail() {}
+	
+	public OrderDetail(Orders orderId, Integer itemId, Integer quantity) {
 		this.orderId = orderId;
 		this.itemId = itemId;
 		this.quantity = quantity;
+	}
+
+	public Integer getOrderDetailId() {
+		return orderDetailId;
+	}
+
+	public void setOrderDetailId(Integer orderDetailId) {
+		this.orderDetailId = orderDetailId;
 	}
 
 	public Orders getOrderId() {
@@ -41,11 +56,11 @@ public class Orderdetail {
 		this.orderId = orderId;
 	}
 
-	public Item getItemId() {
+	public Integer getItemId() {
 		return itemId;
 	}
 
-	public void setItemId(Item itemId) {
+	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
 	}
 
@@ -56,7 +71,5 @@ public class Orderdetail {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-	
-	
 
 }

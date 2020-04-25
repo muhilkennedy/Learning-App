@@ -61,13 +61,18 @@ public class User {
 	
 	@OneToOne(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Verification verification;
+	
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Cart> cart;
+	
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Orders> orders;
 
 	public User() {
 	}
 
 	public User(String emailId, String password, String mobile, String role, String firstName, String lastName,
 			boolean active, String loginVia) {
-		super();
 		this.emailId = emailId;
 		this.password = password;
 		this.mobile = mobile;
@@ -184,5 +189,4 @@ public class User {
 			});
 		}
 	}
-
 }

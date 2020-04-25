@@ -7,22 +7,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.miniproject.model.OrderDetail;
 import com.miniproject.model.Orders;
 
 @Repository
-public interface OrdersRepository  extends JpaRepository<Orders, Integer>{
+public interface OrdersRepository extends JpaRepository<Orders, Integer> {
 	
-	String findOrdersQuery = "select ord from Orders ord where ord.ORDERID = :orderId";
-	String findOrderByStatusQuery = "select ord from Orders ord where ord.STATUS = :status";
-	String findOrderByUserQuery = "select ord from Orders ord where ord.USERID = :userId";
+	String findOrderQuery = "select order from Orders order where order.orderId = :orderId";
+	String findOrderByUserQuery = "select od from Orders od where od.userId = :userId order by orderDate desc";
 	
-	@Query(findOrdersQuery)
-	Orders findOrders(@Param("orderId") int orderId);
-	
-	@Query(findOrderByStatusQuery)
-	List<Orders> findOrderByStatus(@Param("status") String status);
+	@Query(findOrderQuery)
+	Orders findOrderById(@Param("orderId") int orderId);
 	
 	@Query(findOrderByUserQuery)
-	List<Orders> findOrderBySUser(@Param("userId") int userId);
-
+	List<Orders> findOrderByUserId(@Param("userId") int userId);
+	
 }

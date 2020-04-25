@@ -18,14 +18,13 @@ import com.miniproject.messages.JWTResponse;
 import com.miniproject.messages.Response;
 import com.miniproject.model.User;
 import com.miniproject.service.LoginService;
-import com.miniproject.service.VerificationService;
 import com.miniproject.util.ConfigUtil;
 import com.miniproject.util.JWTUtil;
 import com.miniproject.util.LogUtil;
 
 /**
  * @author muhilkennedy
- *
+ * contains endpoints for user user auth and creation.
  */
 @RestController
 @RequestMapping("base")
@@ -35,17 +34,14 @@ public class BaseController {
 	private LoginService login;
 	
 	@Autowired
-	VerificationService verificationService;
-	
-	@Autowired
-	ConfigUtil configUtil;
+	private ConfigUtil configUtil;
 	
 	@Autowired
 	private JWTUtil jwtTokenUtil;
 	
 	@RequestMapping("/ping")
-	public GenericResponse init() {
-		GenericResponse response = new GenericResponse();
+	public GenericResponse<String> init() {
+		GenericResponse<String> response = new GenericResponse<>();
 		response.setData(configUtil.getApplicationName());
 		response.setStatus(Response.Status.OK);
 		return response;
@@ -78,9 +74,8 @@ public class BaseController {
 			List<String> msg = Arrays.asList(ex.getMessage());
 			response.setErrorMessages(msg);
 			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR);
-		} finally {
-			return response;
 		}
+		return response;
 	}
 	
 	/**
