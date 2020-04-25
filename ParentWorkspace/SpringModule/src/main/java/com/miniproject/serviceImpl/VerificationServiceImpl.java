@@ -19,7 +19,7 @@ import com.miniproject.service.VerificationService;
 public class VerificationServiceImpl implements VerificationService {
 
 	@Autowired
-	VerificationRepository verificationRepo;
+	private VerificationRepository verificationRepo;
 
 	@Override
 	public List<Verification> getAllVerifications() {

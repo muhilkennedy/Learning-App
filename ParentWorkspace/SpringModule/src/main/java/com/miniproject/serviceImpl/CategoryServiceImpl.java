@@ -1,9 +1,13 @@
 package com.miniproject.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
+import org.hibernate.Hibernate;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 	private CategoryRepository categoryRepo;
 	
 	@Override
+	@Transactional
 	public void save(Category category) {
 		categoryRepo.save(category);
 	}
@@ -42,24 +47,53 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryRepo.findChildren(id);
 	}
 	
-	private Map getExplodedContentRecursive(List<Category> categories) throws JSONException {
-		Map test = new HashMap();
-		for(Category category : categories) {
-			test.put(category.getCategory() , getExplodedContentRecursive(findChildren(category.getcId())));
+	@Override
+	public Category createCategory(Category cat) throws Exception {
+		logger.debug("createCategory :: Creating category - " + cat.getCategory());
+		if (cat.getParentId() != null) {
+			Category parentCategory = categoryRepo.findCategory(cat.getParentId());
+			if (parentCategory == null) {
+				throw new Exception("Parent not found");
+			}
 		}
-		return test;
+		categoryRepo.save(cat);
+		return cat;
+	}
+	
+	private Map getExplodedContentRecursive(List<Category> categories) throws JSONException {
+		Map map = new HashMap();
+		for(Category category : categories) {
+			map.put(category.getCategory() , getExplodedContentRecursive(findChildren(category.getcId())));
+		}
+		return map;
+	}
+	
+	private List<Integer> getCategoryIdRecursive(Category category) throws Exception {
+		List<Integer> catChildren = new ArrayList<>();
+		catChildren.add(category.getcId());
+		for(Category cat: findChildren(category.getcId())) {
+			catChildren.addAll(getCategoryIdRecursive(cat));
+		}
+		return catChildren;
 	}
 	
 	@Override
 	public Map buildTreeMap() throws Exception{
+		logger.debug("buildTreeMap :: Get all categories recursively");
 		List<Category> baseParents = categoryRepo.findParentCategories();
 		return  getExplodedContentRecursive(baseParents);
 	}
 	
 	@Override
 	public Map findChildrenRecursive(int parentId) throws Exception {
+		logger.debug("findChildrenRecursive :: Getting children for parent - " + parentId);
 		List<Category> baseParents = categoryRepo.findChildren(parentId);
 		return  getExplodedContentRecursive(baseParents);
+	}
+	
+	@Override 
+	public List findChildrenIdRecursive(Category cat) throws Exception {
+		return getCategoryIdRecursive(cat);
 	}
 
 }
