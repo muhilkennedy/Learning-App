@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class DbUtil {
 	
 	@Autowired
-	ConfigUtil configUtil;
+	private ConfigUtil configUtil;
 
 	public Connection getConnectionInstance() throws Exception {
 		return DriverManager.getConnection(configUtil.getDbUrl(), configUtil.getDbUser(), configUtil.getDbPassword());

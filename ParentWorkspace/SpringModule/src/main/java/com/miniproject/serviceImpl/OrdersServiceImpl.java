@@ -19,9 +19,7 @@ import com.miniproject.model.Invoice;
 import com.miniproject.model.OrderDetail;
 import com.miniproject.model.Orders;
 import com.miniproject.model.User;
-import com.miniproject.repository.OrderDetailRepository;
 import com.miniproject.repository.OrdersRepository;
-import com.miniproject.service.InvoiceService;
 import com.miniproject.service.OrdersService;
 import com.miniproject.util.CommonUtil;
 import com.miniproject.util.InvoiceUtil;
@@ -32,16 +30,10 @@ public class OrdersServiceImpl implements OrdersService {
 	private static Logger logger = LoggerFactory.getLogger(OrdersServiceImpl.class);
 	
 	@Autowired
-	OrdersRepository ordersRepo;
+	private OrdersRepository ordersRepo;
 	
 	@Autowired
-	OrdersDao ordersDao;
-	
-	@Autowired
-	OrderDetailRepository orderDetailRepo;
-	
-	@Autowired
-	InvoiceService invService;
+	private OrdersDao ordersDao;
 	
 	@Autowired
 	private InvoiceUtil invoiceUtil;

@@ -18,10 +18,10 @@ import com.miniproject.service.ItemService;
 public class ItemServiceImpl implements ItemService {
 
 	@Autowired
-	ItemRepository itemRepo;
+	private ItemRepository itemRepo;
 	
 	@Autowired
-	ItemDao itemDao;
+	private ItemDao itemDao;
 
 	@Override
 	public Item findItem(int id) {

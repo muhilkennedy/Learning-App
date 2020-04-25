@@ -29,13 +29,6 @@ public class ResponseUtil {
 			if (user.getVerification() != null) {
 				user.getVerification().setUserId(null);
 			}
-			
-			/* Remove cart user object to avoid json StackOverflowError */
-			if (!CollectionUtils.isEmpty(user.getCart())) {
-				user.getCart().stream().forEach(item -> {
-					item.setUserId(null);
-				});
-			}
 		}
 		return user;
 	}

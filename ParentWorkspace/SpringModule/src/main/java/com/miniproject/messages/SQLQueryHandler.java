@@ -1,6 +1,9 @@
 package com.miniproject.messages;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.assertj.core.util.Arrays;
 
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
@@ -27,6 +30,7 @@ public class SQLQueryHandler {
 		private String query;
 		
 		public static final String Key_WhereClause = " where ";
+		public static final String Key_SetClause = " set ";
 		public static final String Key_OrCondition = " or ";
 		public static final String Key_AndCondition = " and ";
 		public static final String Key_LimitCondition = " limit ";
@@ -53,6 +57,21 @@ public class SQLQueryHandler {
 		public SQLQueryBuilder setAndConditionForInt(String fieldName, List<Integer> values) {
 			return setAndCondition(fieldName, Lists.transform(values, Functions.toStringFunction()));
 		}
+		
+		public SQLQueryBuilder setAndCondition(String fieldName, Integer value , boolean prefixAnd) {
+			List<Integer> arrayList = new ArrayList<>();
+			arrayList.add(value);
+			if(prefixAnd) {
+				return setAndConditionForInt(Key_AndCondition.concat(fieldName), arrayList);
+			}
+			return setAndConditionForInt(fieldName, arrayList);
+		}
+		
+		public SQLQueryBuilder setAndCondition(String fieldName, String value) {
+			List<String> arrayList = new ArrayList<>();
+			arrayList.add(value);
+			return setAndCondition(fieldName, arrayList);
+		}
 
 		public SQLQueryBuilder setAndCondition(String fieldName, List<String> values) {
 			int count = 1;
@@ -69,6 +88,21 @@ public class SQLQueryHandler {
 
 		public SQLQueryBuilder setOrConditionForInt(String fieldName, List<Integer> values) {
 			return setOrCondition(fieldName, Lists.transform(values, Functions.toStringFunction()));
+		}
+		
+		public SQLQueryBuilder setOrCondition(String fieldName, Integer value, boolean prefixOr) {
+			List<Integer> arrayList = new ArrayList<>();
+			arrayList.add(value);
+			if(prefixOr) {
+				return setAndConditionForInt(Key_OrCondition.concat(fieldName), arrayList);
+			}
+			return setOrConditionForInt(fieldName, arrayList);
+		}
+
+		public SQLQueryBuilder setOrCondition(String fieldName, String value) {
+			List<String> arrayList = new ArrayList<>();
+			arrayList.add(value);
+			return setOrCondition(fieldName, arrayList);
 		}
 		
 		public SQLQueryBuilder setOrCondition(String fieldName, List<String> values) {

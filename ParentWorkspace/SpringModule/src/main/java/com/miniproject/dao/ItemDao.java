@@ -16,7 +16,7 @@ import com.miniproject.util.DbUtil;
 public class ItemDao {
 
 	@Autowired
-	DbUtil dbUtil;
+	private DbUtil dbUtil;
 
 	public List<Integer> getItemIds(List<Integer> cIds, String limit, String offset) throws Exception {
 		List<Integer> items = new ArrayList<>();

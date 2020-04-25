@@ -19,7 +19,7 @@ import com.miniproject.util.DbUtil;
 public class OrdersDao {
 
 	@Autowired
-	DbUtil dbUtil;
+	private DbUtil dbUtil;
 
 	public List<Integer> getOrdersByUserId(int userId) throws Exception {
 		List<Integer> orders = new ArrayList<>();

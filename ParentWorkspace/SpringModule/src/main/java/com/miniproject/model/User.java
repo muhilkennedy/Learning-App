@@ -170,14 +170,6 @@ public class User {
 	public void setVerification(Verification verification) {
 		this.verification = verification;
 	}
-	
-	public List<Cart> getCart() {
-		return cart;
-	}
-
-	public void setCart(List<Cart> cart) {
-		this.cart = cart;
-	}
 
 	/**
 	 * Perform default actions before final persist.

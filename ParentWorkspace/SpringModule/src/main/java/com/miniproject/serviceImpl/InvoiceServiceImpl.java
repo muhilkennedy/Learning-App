@@ -16,10 +16,10 @@ import com.miniproject.util.InvoiceUtil;
 public class InvoiceServiceImpl implements InvoiceService{
 
 	@Autowired
-	InvoiceRepository invRepo;
+	private InvoiceRepository invRepo;
 	
 	@Autowired
-	InvoiceUtil invUtil;
+	private InvoiceUtil invUtil;
 	
 	@Override
 	@Transactional

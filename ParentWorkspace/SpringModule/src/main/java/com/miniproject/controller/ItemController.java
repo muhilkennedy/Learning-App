@@ -29,10 +29,10 @@ import com.miniproject.util.LogUtil;
 public class ItemController {
 	
 	@Autowired
-	ItemService itemService;
+	private ItemService itemService;
 	
 	@Autowired
-	CategoryService categoryService;
+	private CategoryService categoryService;
 	
 	@RequestMapping(value = "/createCategory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<Category> createCategory(@RequestBody Category category){

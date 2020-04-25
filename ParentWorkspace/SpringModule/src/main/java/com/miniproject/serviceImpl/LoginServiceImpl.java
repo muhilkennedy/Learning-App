@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +13,12 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.miniproject.dao.CartDao;
+import com.miniproject.model.Cart;
 import com.miniproject.model.User;
 import com.miniproject.model.Verification;
 import com.miniproject.repository.UserRepository;
 import com.miniproject.service.LoginService;
-import com.miniproject.service.VerificationService;
 import com.miniproject.util.CommonUtil;
 import com.miniproject.util.LogUtil;
 import com.miniproject.util.ResponseUtil;
@@ -35,7 +37,7 @@ public class LoginServiceImpl implements LoginService {
 	private UserRepository userRepository;
 	
 	@Autowired
-	VerificationService verificationService;
+	private CartDao cartDao;
 	
 	@Autowired
 	private SocialUtil socialUtil;
@@ -137,5 +139,28 @@ public class LoginServiceImpl implements LoginService {
 		}
 		saveUser(user);
 		sendVerification(user.getEmailId(), code, null, true);
+	}
+	
+	@Override
+	public User insertCartToUser(User user, List<Cart> cartItems) throws Exception {
+		List<Integer> userCartItems = cartDao.getItemIds(user.getUserId());
+		cartItems.parallelStream().forEach(item -> {
+			try {
+				if(userCartItems.contains(item.getItemId())) {
+					cartDao.updateQuantityInCart(user.getUserId(), item.getItemId(), item.getQuantity());
+				}
+				else {
+					cartDao.insertIntoCart(user.getUserId(), item.getItemId(), item.getQuantity());
+				}
+			} catch (Exception e) {
+				logger.error("insertCartToUser :: Exception - " + e.getMessage());
+			}
+		});
+		return user;
+	}
+	
+	@Override
+	public Map<Integer, Integer> getCartForUser(int id) throws Exception{
+		return cartDao.getCartItemsWithQuantity(id);
 	}
 }

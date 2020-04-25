@@ -18,7 +18,6 @@ import com.miniproject.messages.JWTResponse;
 import com.miniproject.messages.Response;
 import com.miniproject.model.User;
 import com.miniproject.service.LoginService;
-import com.miniproject.service.VerificationService;
 import com.miniproject.util.ConfigUtil;
 import com.miniproject.util.JWTUtil;
 import com.miniproject.util.LogUtil;
@@ -35,10 +34,7 @@ public class BaseController {
 	private LoginService login;
 	
 	@Autowired
-	VerificationService verificationService;
-	
-	@Autowired
-	ConfigUtil configUtil;
+	private ConfigUtil configUtil;
 	
 	@Autowired
 	private JWTUtil jwtTokenUtil;

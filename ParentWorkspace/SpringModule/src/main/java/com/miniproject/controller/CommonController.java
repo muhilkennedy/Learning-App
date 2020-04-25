@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.miniproject.messages.GenericResponse;
 import com.miniproject.messages.Response;
-import com.miniproject.messages.SQLQueryHandler.SQLQueryBuilder;
 import com.miniproject.model.Category;
 import com.miniproject.model.Item;
 import com.miniproject.service.CategoryService;
@@ -32,10 +31,10 @@ import com.miniproject.util.LogUtil;
 public class CommonController {
 	
 	@Autowired
-	CategoryService categoryService;
+	private CategoryService categoryService;
 	
 	@Autowired
-	ItemService itemService;
+	private ItemService itemService;
 	
 	@RequestMapping(value = "/getCategory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<Category> getUserData(@RequestParam(value = "categoryName", required = false) String catName,
