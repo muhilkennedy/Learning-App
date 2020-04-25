@@ -1,37 +1,36 @@
 package com.miniproject.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * @author Mohaneswaran
- *
- *         Maps with user and item table with many to one cardinality.
+ * @author Mohan
+ * maps to cart user and item as composite.
  */
-
 @Entity
 @Table(name = "CART")
+public class Cart implements Serializable{
 
-public class Cart {
-	
-	@OneToOne
+	@EmbeddedId
+	@ManyToOne
 	@JoinColumn(name = "USERID", nullable = false)
 	private User userId;
 	
-	@OneToMany
-	@JoinColumn(name = "ITEMID", nullable = false)
-	private Item itemId;
+	@Column(name = "ITEMID")
+	private Integer itemId;
 	
 	@Column(name = "QUANTITY")
 	private Integer quantity;
-	
-	
 
-	public Cart(User userId, Item itemId, Integer quantity) {
+	public Cart() {}
+	
+	public Cart(User userId, Integer itemId, Integer quantity) {
 		this.userId = userId;
 		this.itemId = itemId;
 		this.quantity = quantity;
@@ -45,11 +44,11 @@ public class Cart {
 		this.userId = userId;
 	}
 
-	public Item getItemId() {
+	public Integer getItemId() {
 		return itemId;
 	}
 
-	public void setItemId(Item itemId) {
+	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
 	}
 
@@ -60,7 +59,5 @@ public class Cart {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-	
-	
 
 }

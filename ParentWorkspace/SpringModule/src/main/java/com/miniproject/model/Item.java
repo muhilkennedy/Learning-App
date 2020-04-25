@@ -9,15 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * @author Mohaneswaran
- *
- *         maps with Category table with many to one cardinality.
+ * @author Mohan
+ * Granular items
  */
-
 @Entity
 @Table(name = "ITEM")
 public class Item {
@@ -27,12 +25,8 @@ public class Item {
 	@Column(name = "ITEMID")
 	private Integer itemId;
 	
-	@ManyToMany
-	@JoinColumn(name = "CID", nullable = false)
-	private Category cId;
-	
 	@Column(name = "ITEM")
-	private String item;
+	private String itemName;
 	
 	@Column(name = "BRANDNAME")
 	private String brandName;
@@ -44,31 +38,29 @@ public class Item {
 	private String measure;
 	
 	@Column(name = "OFFER")
-	private BigDecimal offer;
+	private Integer offer;
 	
 	@Column(name = "IMAGE")
 	private Blob image;
 	
 	@Column(name = "ACTIVE")
 	private boolean active;
+
+	@ManyToOne
+	@JoinColumn(name = "CID", nullable = false)
+	private Category cId;
+
+	public Item() {}
 	
-	public Item( Category cId, String item, String brandName, BigDecimal cost, String measure,
-			BigDecimal offer, Blob image) {
-		this.cId = cId;
-		this.item = item;
+	public Item(String itemName, String brandName, BigDecimal cost, String measure, Integer offer, Blob image,
+			Category cId) {
+		this.itemName = itemName;
 		this.brandName = brandName;
 		this.cost = cost;
 		this.measure = measure;
 		this.offer = offer;
 		this.image = image;
-	}
-	
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
+		this.cId = cId;
 	}
 
 	public Integer getItemId() {
@@ -79,20 +71,12 @@ public class Item {
 		this.itemId = itemId;
 	}
 
-	public Category getcId() {
-		return cId;
+	public String getItemName() {
+		return itemName;
 	}
 
-	public void setcId(Category cId) {
-		this.cId = cId;
-	}
-
-	public String getItem() {
-		return item;
-	}
-
-	public void setItem(String item) {
-		this.item = item;
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 
 	public String getBrandName() {
@@ -119,11 +103,11 @@ public class Item {
 		this.measure = measure;
 	}
 
-	public BigDecimal getOffer() {
+	public Integer getOffer() {
 		return offer;
 	}
 
-	public void setOffer(BigDecimal offer) {
+	public void setOffer(Integer offer) {
 		this.offer = offer;
 	}
 
@@ -133,6 +117,22 @@ public class Item {
 
 	public void setImage(Blob image) {
 		this.image = image;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public Category getcId() {
+		return cId;
+	}
+
+	public void setcId(Category cId) {
+		this.cId = cId;
 	}
 
 }

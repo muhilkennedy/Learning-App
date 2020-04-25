@@ -19,6 +19,15 @@ public class ConfigUtil {
 	@Value("${spring.flyway.enabled}")
 	private boolean flywayEnabled;
 	
+	@Value("${spring.datasource.url}")
+	private String dbUrl;
+	
+	@Value("${spring.datasource.username}")
+	private String dbUser;
+	
+	@Value("${spring.datasource.password}")
+	private String dbPassword;
+	
 	@Value("${spring.social.gmail.id}")
 	private String senderGmailId;
 	
@@ -54,8 +63,21 @@ public class ConfigUtil {
 	public String uiHost() {
 		return angularUiHost;
 	}
-	
+
 	public boolean isMailingServiceEnabled() {
 		return mailingService;
 	}
+
+	public String getDbUrl() {
+		return dbUrl;
+	}
+
+	public String getDbUser() {
+		return dbUser;
+	}
+
+	public String getDbPassword() {
+		return dbPassword;
+	}
+
 }

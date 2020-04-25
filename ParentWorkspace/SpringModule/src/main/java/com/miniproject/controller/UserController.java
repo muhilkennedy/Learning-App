@@ -30,7 +30,7 @@ import com.miniproject.util.ResponseUtil;
 public class UserController {
 
 	@Autowired
-	private LoginService login;
+	private LoginService userService;
 	
 	@Autowired
 	private JWTUtil jwtTokenUtil;
@@ -43,14 +43,14 @@ public class UserController {
 			if (email == null) {
 				email = jwtTokenUtil.getUserEmailFromToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 			}
-			User user = login.findUser(email);
+			User user = userService.findUser(email);
 			if (user != null) {
 				response.setData(ResponseUtil.cleanUpUserResponse(user));
 				response.setStatus(Response.Status.OK);
 			} else {
 				List<String> msg = Arrays.asList("User Does Not Exist");
 				response.setErrorMessages(msg);
-				response.setStatus(Response.Status.NOT_FOUND);
+				response.setStatus(Response.Status.NO_CONTENT);
 			}
 		} catch (Exception ex) {
 			LogUtil.getLogger().error("getUserData : " + ex);

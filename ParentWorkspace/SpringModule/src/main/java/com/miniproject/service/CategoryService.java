@@ -19,4 +19,8 @@ public interface CategoryService {
 
 	Map findChildrenRecursive(int parentId) throws Exception;
 
+	Category createCategory(Category cat) throws Exception;
+
+	List findChildrenIdRecursive(Category cat) throws Exception;
+
 }

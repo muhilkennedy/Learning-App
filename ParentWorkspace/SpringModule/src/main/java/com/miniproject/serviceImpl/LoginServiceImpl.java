@@ -24,7 +24,7 @@ import com.miniproject.util.SocialUtil;
 
 /**
  * @author MuhilKennedy
- *
+ * This also acts as UserService
  */
 @Service
 public class LoginServiceImpl implements LoginService {
