@@ -33,7 +33,9 @@ public class SQLQueryHandler {
 		public static final String Key_AndCondition = " and ";
 		public static final String Key_LimitCondition = " limit ";
 		public static final String Key_OffsetCondition = " offset ";
-		public static final String Key_Equals = "=";
+		public static final String Key_Equals = " = ";
+		public static final String Key_StartBrace = " ( ";
+		public static final String Key_EndBrace = " ) ";
 
 		public SQLQueryHandler build() {
 			return new SQLQueryHandler(this);
@@ -52,6 +54,16 @@ public class SQLQueryHandler {
 			return this;
 		}
 		
+		public SQLQueryBuilder setStartBrace() {
+			this.query = query.concat(Key_StartBrace);
+			return this;
+		}
+		
+		public SQLQueryBuilder setEndBrace() {
+			this.query = query.concat(Key_EndBrace);
+			return this;
+		}
+		
 		public SQLQueryBuilder setAndConditionForInt(String fieldName, List<Integer> values) {
 			return setAndCondition(fieldName, Lists.transform(values, Functions.toStringFunction()));
 		}
@@ -65,9 +77,12 @@ public class SQLQueryHandler {
 			return setAndConditionForInt(fieldName, arrayList);
 		}
 		
-		public SQLQueryBuilder setAndCondition(String fieldName, String value) {
+		public SQLQueryBuilder setAndCondition(String fieldName, String value, boolean prefixAnd) {
 			List<String> arrayList = new ArrayList<>();
 			arrayList.add(value);
+			if(prefixAnd) {
+				return setAndCondition(Key_AndCondition.concat(fieldName), arrayList);
+			}
 			return setAndCondition(fieldName, arrayList);
 		}
 
@@ -135,5 +150,6 @@ public class SQLQueryHandler {
 			}
 			return this;
 		}
+ 
 	}
 }

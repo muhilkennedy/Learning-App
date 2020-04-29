@@ -82,7 +82,7 @@ public class UserController {
 			if (user != null) {
 				Map<Integer, Integer> itemQuantityMap = userService.getCartForUser(user.getUserId());
 				response.setData(itemQuantityMap);
-				response.setDataList(itemService.getItems(Lists.newArrayList(itemQuantityMap.keySet()), null, null));
+				response.setDataList(itemService.getItems(Lists.newArrayList(itemQuantityMap.keySet())));
 				response.setStatus(Response.Status.OK);
 			} else {
 				List<String> msg = Arrays.asList("User Does Not Exist");

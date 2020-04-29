@@ -50,6 +50,29 @@ public class ItemController {
 		return response;
 	}
 	
+	@RequestMapping(value = "/deleteCategory", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public GenericResponse<String> deleteCategory(@RequestParam(value = "categoryId", required = true) String catId){
+		GenericResponse<String> response = new GenericResponse<>();
+		try {
+			Category cat = categoryService.find(Integer.parseInt(catId));
+			if(cat != null) {
+				//Child deltion will be taken care in the Scheduled task.
+				categoryService.markCategoryForDeletion(cat, false);
+				response.setStatus(Response.Status.OK);
+			}
+			else {
+				response.setStatus(Response.Status.NOT_FOUND);
+				response.setErrorMessages(Arrays.asList("Item not found"));
+			}
+		}catch (Exception ex) {
+			LogUtil.getLogger().error("createItem : " + ex);
+			List<String> msg = Arrays.asList(ex.getMessage());
+			response.setErrorMessages(msg);
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
+	
 	@RequestMapping(value = "/createItem", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<Item> createItem(@RequestParam(value = "categoryId", required = true) String catId,
 											@RequestBody Item item){
@@ -63,6 +86,53 @@ public class ItemController {
 			else {
 				response.setErrorMessages(Arrays.asList("Category not found"));
 				response.setStatus(Response.Status.NOT_FOUND);
+			}
+		}catch (Exception ex) {
+			LogUtil.getLogger().error("createItem : " + ex);
+			List<String> msg = Arrays.asList(ex.getMessage());
+			response.setErrorMessages(msg);
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/deleteItem", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public GenericResponse<String> createItem(@RequestParam(value = "itemId", required = true) String itemId){
+		GenericResponse<String> response = new GenericResponse<>();
+		try {
+			Item item = itemService.findActiveItem(Integer.parseInt(itemId));
+			if(item != null) {
+				itemService.deleteItem(item);
+				response.setStatus(Response.Status.OK);
+			}
+			else {
+				response.setStatus(Response.Status.NOT_FOUND);
+				response.setErrorMessages(Arrays.asList("Item not found"));
+			}
+		}catch (Exception ex) {
+			LogUtil.getLogger().error("createItem : " + ex);
+			List<String> msg = Arrays.asList(ex.getMessage());
+			response.setErrorMessages(msg);
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/updateItem", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public GenericResponse<Item> updateItem(@RequestParam(value = "itemId", required = true) String itemId,
+											@RequestParam(value = "categoryId", required = true) String catId,
+											@RequestBody Item newItem){
+		GenericResponse<Item> response = new GenericResponse<>();
+		try {
+			Item item = itemService.findActiveItem(Integer.parseInt(itemId));
+			if (item != null) {
+				itemService.deleteItem(item);
+				response.setData(itemService.updateItem(item, newItem, categoryService.find(Integer.parseInt(catId))));
+				response.setStatus(Response.Status.OK);
+			}
+			else {
+				response.setStatus(Response.Status.NOT_FOUND);
+				response.setErrorMessages(Arrays.asList("Item not found"));
 			}
 		}catch (Exception ex) {
 			LogUtil.getLogger().error("createItem : " + ex);

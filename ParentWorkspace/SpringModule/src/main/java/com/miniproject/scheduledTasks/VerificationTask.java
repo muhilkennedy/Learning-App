@@ -23,7 +23,7 @@ import com.miniproject.util.LogUtil;
 public class VerificationTask implements ScheduledTask {
 
 	@Autowired
-	VerificationService verificationService;
+	private VerificationService verificationService;
 
 	//cron = sec min hour day mon dayOfWeek year.
 	@Scheduled(cron = " 0 0/5 * * * * ")
