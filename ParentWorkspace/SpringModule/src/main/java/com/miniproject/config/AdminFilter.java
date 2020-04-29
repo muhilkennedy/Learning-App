@@ -24,15 +24,12 @@ import com.miniproject.util.LogUtil;
 import io.jsonwebtoken.SignatureException;
 
 /**
- * @author MuhilKennedy
- *
- *Generic security filter for endpoints configured in filterbean registration.
- *1.JWT implementation - done
- *2.Oauth - currently unavailable
+ * @author Muhil Kennedy
+ * Performs additional check for user scope.
  */
 @Component
-@Order(1) // AOP used for filter order precedence.
-public class SecurityFilter implements Filter {
+@Order(2)
+public class AdminFilter implements Filter {
 
 	@Autowired
 	private ConfigUtil configUtil;
@@ -41,13 +38,13 @@ public class SecurityFilter implements Filter {
 	private JWTUtil jwtToken;
 
 	private static Logger logger = LoggerFactory.getLogger(SecurityFilter.class);
-
+	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		LogUtil.getLogger(SecurityFilter.class).info("doFilter :: Logging Request : " + req.getRequestURI());
+		LogUtil.getLogger(SecurityFilter.class).info("doFilter :: Logging Request(ADMIN FILTER) : " + req.getRequestURI());
 		//JWT check is done only if deployed in prod mode.
 		if (configUtil.isProdDeploymentMode()) {
 			try {
@@ -56,6 +53,11 @@ public class SecurityFilter implements Filter {
 					if (!jwtToken.validateToken(req.getHeader(HttpHeaders.AUTHORIZATION))) {
 						((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED,
 								"Unauthorized Request");
+						return;
+					}
+					if(!jwtToken.isAdminScope(req.getHeader(HttpHeaders.AUTHORIZATION))) {
+						((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED,
+								"Only Admins can Access this Endpoint");
 						return;
 					}
 					chain.doFilter(request, response);
@@ -80,6 +82,7 @@ public class SecurityFilter implements Filter {
 		LogUtil.getLogger(SecurityFilter.class)
 				.info("doFilter :: Logging Response : " + res.getStatus() + " | " + res.getContentType());
 
+		
 	}
 
 }

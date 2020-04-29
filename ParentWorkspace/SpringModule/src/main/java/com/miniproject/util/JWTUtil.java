@@ -31,6 +31,15 @@ public class JWTUtil {
 	public String getUserEmailFromToken(String token) throws Exception {
 		return getClaimFromToken(token, Claims::getSubject);
 	}
+	
+	public boolean isAdminScope(String token) throws Exception {
+		Claims claims = getAllClaimsFromToken(token);
+		String scope = (String) claims.get(CommonUtil.Header_Scope);
+		if(scope.equalsIgnoreCase(CommonUtil.Key_adminPermission)) {
+			return true;
+		}
+		return false;
+	}
 
 	//retrieve expiration date from jwt token
 	public Date getExpirationDateFromToken(String token) throws Exception {
@@ -59,7 +68,7 @@ public class JWTUtil {
 	 */
 	public String generateToken(User userDetails) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("scope", userDetails.getRole());
+		claims.put(CommonUtil.Header_Scope, userDetails.getRole());
 		//we can add more details about user in future in Claims map if needed.
 		return doGenerateToken(claims, userDetails.getEmailId());
 	}

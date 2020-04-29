@@ -23,4 +23,14 @@ public interface CategoryService {
 
 	List findChildrenIdRecursive(Category cat) throws Exception;
 
+	List<Category> findAllDeletedCategory();
+
+	List<Category> findAllActiveCategory();
+
+	List<Category> findAllCategoryMarkedForDeletion();
+
+	void deleteCategory(Category cat, boolean deleteChildren) throws Exception;
+
+	void markCategoryForDeletion(Category cat, boolean markChildren) throws Exception;
+
 }

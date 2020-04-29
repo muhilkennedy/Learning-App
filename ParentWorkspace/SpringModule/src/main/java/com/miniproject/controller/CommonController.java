@@ -109,7 +109,7 @@ public class CommonController {
 				List<Integer> catagories  = categoryService.findChildrenIdRecursive(cat);
 				String limit = request.getHeader(CommonUtil.Header_Limit);
 				String offset = request.getHeader(CommonUtil.Header_Offset);
-				List<Item> items = itemService.getItems(catagories, limit, offset);
+				List<Item> items = itemService.getItemsForCategory(catagories, limit, offset, false);
 				response.setDataList(items);
 				response.setStatus(Response.Status.OK);
 			}

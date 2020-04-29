@@ -45,6 +45,9 @@ public class Item {
 	
 	@Column(name = "ACTIVE")
 	private boolean active;
+	
+	@Column(name = "ISDELETED")
+	private boolean isDeleted;
 
 	@ManyToOne
 	@JoinColumn(name = "CID", nullable = false)
@@ -133,6 +136,14 @@ public class Item {
 
 	public void setcId(Category cId) {
 		this.cId = cId;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 }

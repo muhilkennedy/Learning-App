@@ -1,13 +1,13 @@
 package com.miniproject.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.hibernate.Hibernate;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +40,21 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public Category findByName(String categoryName) {
 		return categoryRepo.findCategoryByName(categoryName);
+	}
+	
+	@Override
+	public List<Category> findAllDeletedCategory(){
+		return categoryRepo.findDeletedCategory();
+	}
+	
+	@Override
+	public List<Category> findAllActiveCategory(){
+		return categoryRepo.findActiveCategory();
+	}
+	
+	@Override
+	public List<Category> findAllCategoryMarkedForDeletion(){
+		return categoryRepo.findMarkedForDeletion();
 	}
 
 	@Override
@@ -94,6 +109,44 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override 
 	public List findChildrenIdRecursive(Category cat) throws Exception {
 		return getCategoryIdRecursive(cat);
+	}
+	
+	/*
+	 * Only soft delete will be done to the category and all its children.
+	 */
+	@Override
+	@Transactional
+	public void deleteCategory(Category cat, boolean deleteChildren) throws Exception {
+		if(deleteChildren) {
+			List<Integer> children = findChildrenIdRecursive(cat);
+			children.stream().forEach(child -> {
+				Category category = find(child);
+				category.setDeleted(true);
+				category.setMarkForDelete(false);
+			});
+		}
+		else {
+			cat.setDeleted(true);
+			cat.setMarkForDelete(false);
+		}
+	}
+	
+	/*
+	 * This enables scheduled task to pick up the category for deletion in next run.
+	 */
+	@Override
+	@Transactional
+	public void markCategoryForDeletion(Category cat, boolean markChildren) throws Exception {
+		if(markChildren) {
+			List<Integer> children = findChildrenIdRecursive(cat);
+			children.stream().forEach(child -> {
+				Category category = find(child);
+				category.setMarkForDelete(true);
+			});
+		}
+		else {
+			cat.setMarkForDelete(true);
+		}
 	}
 
 }
