@@ -3,8 +3,6 @@ package com.miniproject.messages;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.assertj.core.util.Arrays;
-
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
 
