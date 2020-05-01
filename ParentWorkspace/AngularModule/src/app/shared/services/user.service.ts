@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
 
+export interface cart{
+  itemId:number,
+  itemName:string,
+  quantity:number
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +20,8 @@ export class UserService {
   loginVia:string;
   active:boolean;
   token:string;
+
+  cartItems: cart[] = [];
 
   constructor() { }
 
