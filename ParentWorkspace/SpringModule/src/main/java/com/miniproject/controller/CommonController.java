@@ -149,14 +149,14 @@ public class CommonController {
 		}
 		return response;
 	}
-
+	
 //	Remove this method before commit
 	@RequestMapping(value = "/setItem", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<ItemResponse> testAddItem(
 			@RequestParam(value = "itemId", required = true) String itemId, HttpServletRequest request) {
 		GenericResponse<ItemResponse> response = new GenericResponse<>();
 		Item item = itemService.findItem(Integer.parseInt(itemId));
-		File file = new File("/Users/i339628/Desktop/m30s.jpg");
+		File file = new File("/Users/i339628/Desktop/20200502_182128.jpg");
 		try {
 			Blob blob = new SerialBlob(FileUtils.readFileToByteArray(file));
 			item.setImage(blob);
@@ -172,6 +172,5 @@ public class CommonController {
 		}
 		return response;
 	}
-
 	
 }

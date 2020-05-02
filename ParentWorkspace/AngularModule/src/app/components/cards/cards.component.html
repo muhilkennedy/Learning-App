@@ -9,7 +9,7 @@
           <mat-card-title>{{card.itemName}}</mat-card-title>
           <mat-card-subtitle>{{card.categoryName}}</mat-card-subtitle>
         </mat-card-header>
-        <img class="imgClass" mat-card-image src={{card.image}} alt="No Photo">
+        <img (click)="viewFullImage(card)" class="imgClass" mat-card-image src={{card.image}} alt="No Photo">
         <mat-card-content>
           <h3>{{card.brandName | allCaps}}</h3>
           <span style="color: green;"><b>{{card.cost}}</b> INR/{{card.measure}} </span> - <span *ngIf="card.offer!=null" style="color: brown">{{card.offer}} flat OFF</span>
@@ -23,4 +23,14 @@
       </mat-card>
     </div>
   </div>
+</div>
+
+<!-- Overlay image on webpage for full view (modal images)-->
+<div #parent  class="modal">
+  <!-- The Close Button -->
+  <span (click)="closeImageOverview()" class="close">&times;</span>
+  <!-- Modal Content (The Image) -->
+  <img #image class="modal-content" src={{modalImageContent}}>
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption">{{modalImageCaption}}</div>
 </div>

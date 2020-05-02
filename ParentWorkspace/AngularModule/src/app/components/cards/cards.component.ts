@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { CardsService } from 'src/app/shared/services/cards.service';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -15,6 +15,11 @@ export class CardsComponent implements OnInit {
   cards:any[];
 
   itemsLoaded : number;
+
+  modalImageContent:string;
+  modalImageCaption:string;
+  @ViewChild('image') img: ElementRef;
+  @ViewChild('parent') parent: ElementRef;
 
   constructor( private cookieService: CookieService,
                private cardService: CardsService,
@@ -38,6 +43,21 @@ export class CardsComponent implements OnInit {
           console.log("Connection to Backend Failed");
         })
 
+  }
+
+  viewFullImage(card){
+    this.img.nativeElement.src = card.image;
+    this.modalImageCaption = card.itemName;
+    let tag = this.parent.nativeElement;
+    tag.classList.remove("modal");
+    tag.classList.add("modal-open");
+  }
+
+  closeImageOverview(){
+    this.img.nativeElement.src = null;
+    this.modalImageCaption = null;
+    this.parent.nativeElement.classList.remove("modal-open");
+    this.parent.nativeElement.classList.add("modal");
   }
 
   addToCart(item:any){

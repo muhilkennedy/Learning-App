@@ -1,11 +1,20 @@
 package com.miniproject.util;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.util.CollectionUtils;
 
 import com.google.common.io.ByteStreams;
@@ -56,7 +65,12 @@ public class ResponseUtil {
 		order.setUserId(null);
 		return order;
 	}
-	
+
+	/**
+	 * @param item
+	 * @return item response with image converted to base64 string ready for render.
+	 * @throws Exception
+	 */
 	public static ItemResponse convertItemModelToItemResponse(Item item) throws Exception {
 		ItemResponse itemResponse = new ItemResponse();
 		itemResponse.setActive(item.isActive());
@@ -76,7 +90,7 @@ public class ResponseUtil {
 		}
 		return itemResponse;
 	}
-	
+
 	public static List<ItemResponse> convertItemModelToItemResponse(List<Item> items) {
 		List<ItemResponse> itemResponse = new ArrayList<>();
 		items.parallelStream().forEach(item -> {
@@ -90,6 +104,11 @@ public class ResponseUtil {
 		return itemResponse;
 	}
 	
+	/**
+	 * @param items
+	 * @param itemQuantityMap
+	 * @return convert cart items required for ui rendering.
+	 */
 	public static List<CartResponse> convertToCartResponse(List<Item> items, Map<Integer,Integer> itemQuantityMap){
 		List<CartResponse> cartResponse = new ArrayList<>();
 		items.parallelStream().forEach(item -> {
