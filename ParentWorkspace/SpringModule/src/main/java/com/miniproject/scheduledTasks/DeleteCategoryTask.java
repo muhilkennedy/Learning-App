@@ -32,7 +32,7 @@ public class DeleteCategoryTask implements ScheduledTask {
 	@Scheduled(cron = " 0 0 0/1 * * * ")
 	@Override
 	public void execute() {
-		LogUtil.getLogger().info("Scheduled Task Executed : " + new Date());
+		LogUtil.getLogger().info(DeleteCategoryTask.class.getName() + "Scheduled Task Executed : " + new Date());
 		List<Category> categoryList = categoryService.findAllCategoryMarkedForDeletion();
 		List<Integer> cIds = new ArrayList<>();
 		try {

@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LoginService } from '../../services/login.service';
 import { UserService } from '../../services/user.service';
 import { CookieService } from 'ngx-cookie-service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-dialog-overview',
@@ -38,6 +39,7 @@ export class DialogOverviewComponent implements OnInit {
     public loginService: LoginService,
     private user:UserService,
     private cookieService: CookieService,
+    private cartService: CartService,
     public dialogRef: MatDialogRef<DialogOverviewComponent>,
     @Inject(MAT_DIALOG_DATA) public data: null) {}
 
@@ -66,13 +68,21 @@ export class DialogOverviewComponent implements OnInit {
       this.loginService.userLogin(this.uname.nativeElement.value, this.pass.nativeElement.value)
           .subscribe((response:any)=>{
             if(response.statusCode == 200){
-              console.log("Success");
               let userData:any = response.dataList[0];
               this.cookieService.set("userName", userData.firstName);
               this.cookieService.set("userId", userData.userId);
               this.user.setToken(response.data.token);
               this.user.setUserDetails(userData.userId, userData.emailId, userData.mobile,
                   userData.role, userData.firstName, userData.lastName, userData.loginVia, userData.active);
+              this.cartService.getCartForUser()
+                  .subscribe((response:any)=>{
+                    if(response.statusCode == 200){
+                      this.user.cartItems = response.dataList;
+                    }
+                  },
+                  (error)=>{
+                    alert("Failed to load cart Items");
+                  });
               this.dialogRef.close();
             }
             else{

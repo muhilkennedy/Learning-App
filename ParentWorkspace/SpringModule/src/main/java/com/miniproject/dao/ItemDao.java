@@ -54,4 +54,20 @@ public class ItemDao {
 		return items;
 	}
 	
+	public List<Integer> getItemIds(String limit, String offset) throws Exception {
+		List<Integer> items = new ArrayList<>();
+		try (Connection con = dbUtil.getConnectionInstance()) {
+			SQLQueryHandler sql = new SQLQueryHandler.SQLQueryBuilder()
+						  .setQuery("select itemid from item")
+						  .setLimit(limit)
+						  .setOffset(offset)
+						  .build();
+			PreparedStatement stmt = con.prepareStatement(sql.getQuery());
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				items.add(rs.getInt(1));
+			}
+		}
+		return items;
+	}
 }

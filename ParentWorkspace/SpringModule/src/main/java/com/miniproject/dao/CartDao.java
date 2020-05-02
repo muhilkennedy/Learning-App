@@ -70,4 +70,13 @@ public class CartDao {
 		return map;
 	}
 	
+	public void removeCartItemForUser(int userId, int itemId) throws Exception {
+		try (Connection con = dbUtil.getConnectionInstance()) {
+			PreparedStatement stmt = con.prepareStatement("delete from cart where userid=? and itemid=?");
+			stmt.setInt(1, userId);
+			stmt.setInt(2, itemId);
+			stmt.execute();
+		}
+	}
+	
 }

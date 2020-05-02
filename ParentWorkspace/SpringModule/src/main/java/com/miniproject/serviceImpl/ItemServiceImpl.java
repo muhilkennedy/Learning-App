@@ -78,6 +78,18 @@ public class ItemServiceImpl implements ItemService {
 	}
 	
 	@Override
+	public List<Item> getAllItems(String limit, String offset) throws Exception{
+		List<Integer> cIdToFetch = itemDao.getItemIds(limit, offset);
+		List<Item> items = new ArrayList<>();
+		cIdToFetch.stream().forEach(cid -> {
+			Item tempItem = itemRepo.findItem(cid);
+			if(tempItem != null)
+				items.add(tempItem);
+		});
+		return items;
+	}
+	
+	@Override
 	@Transactional
 	public void deactivateItem (Item item) throws Exception {
 		item.setActive(false);

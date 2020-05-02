@@ -13,7 +13,7 @@ export class LoginDialogComponent implements OnInit {
 
   username:string = '';
 
-  constructor(public dialog: MatDialog, private user:UserService, private cookieService: CookieService) { }
+  constructor(public dialog: MatDialog, public user:UserService, private cookieService: CookieService) { }
 
   openDialog(): void {
 
@@ -35,6 +35,7 @@ export class LoginDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.username = '';
   }
 
   isLoggedIn(){
@@ -48,8 +49,9 @@ export class LoginDialogComponent implements OnInit {
 
   logout(){
     this.username = '';
-    this.user.setUserDetails(null, null, null, null, null, null, null, null);
+    this.user = null;
     this.cookieService.deleteAll();
+    location.reload();
   }
 
 }

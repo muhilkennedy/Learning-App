@@ -27,4 +27,6 @@ public interface ItemService {
 
 	List<Item> findAllActiveItems();
 
+	List<Item> getAllItems(String limit, String offset) throws Exception;
+
 }
