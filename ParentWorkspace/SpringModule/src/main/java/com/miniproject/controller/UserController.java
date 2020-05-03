@@ -143,7 +143,7 @@ public class UserController {
 			if (user != null) {
 				user = userService.insertCartToUser(user, cartItems);
 				response.setData(ResponseUtil.cleanUpUserResponse(user));
-				response.setStatus(Response.Status.ERROR);
+				response.setStatus(Response.Status.OK);
 			} else {
 				List<String> msg = Arrays.asList("User Does Not Exist");
 				response.setErrorMessages(msg);
