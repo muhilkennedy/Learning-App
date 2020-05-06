@@ -142,25 +142,23 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public User insertCartToUser(User user, List<Cart> cartItems) throws Exception {
+	public User insertCartToUser(User user, Cart cartItem) throws Exception {
 		List<Integer> userCartItems = cartDao.getItemIds(user.getUserId());
-		cartItems.parallelStream().forEach(item -> {
-			try {
-				if(userCartItems.contains(item.getItemId())) {
-					cartDao.updateQuantityInCart(user.getUserId(), item.getItemId(), item.getQuantity());
-				}
-				else {
-					cartDao.insertIntoCart(user.getUserId(), item.getItemId(), item.getQuantity());
-				}
-			} catch (Exception e) {
-				logger.error("insertCartToUser :: Exception - " + e.getMessage());
-			}
-		});
+		if (userCartItems.contains(cartItem.getItemId())) {
+			cartDao.updateQuantityInCart(user.getUserId(), cartItem.getItemId(), cartItem.getQuantity());
+		} else {
+			cartDao.insertIntoCart(user.getUserId(), cartItem.getItemId(), cartItem.getQuantity());
+		}
 		return user;
 	}
 	
 	@Override
 	public Map<Integer, Integer> getCartForUser(int id) throws Exception{
 		return cartDao.getCartItemsWithQuantity(id);
+	}
+	
+	@Override
+	public void deleteCartItem(int userId, int itemId) throws Exception{
+		cartDao.removeCartItemForUser(userId, itemId);
 	}
 }

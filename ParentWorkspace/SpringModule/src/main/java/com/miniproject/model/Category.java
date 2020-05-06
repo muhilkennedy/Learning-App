@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 /**
  * @author Muhil Kennedy
- * Category tree structure can be maintianed.
+ * Category tree structure can be maintained.
  * We might need to remove / query recursively the category via java.
  *
  */
@@ -32,6 +32,12 @@ public class Category {
 
 	@Column(name = "PARENTID")
 	private Integer parentId;
+	
+	@Column(name = "ISDELETED")
+	private boolean isDeleted;
+	
+	@Column(name="MARKFORDELETE")
+	private boolean markForDelete;
 	
 	@OneToMany(mappedBy = "cId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Item> item;
@@ -65,6 +71,22 @@ public class Category {
 
 	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	public boolean isMarkForDelete() {
+		return markForDelete;
+	}
+
+	public void setMarkForDelete(boolean markForDelete) {
+		this.markForDelete = markForDelete;
 	}
 	
 }

@@ -13,6 +13,20 @@ public interface ItemService {
 
 	Item createItem(Item item, Category category) throws Exception;
 
-	List<Item> getItems(List<Integer> cIds, String limit, String offset) throws Exception;
+	List<Item> getItems(List<Integer> cIds) throws Exception;
+
+	Item findActiveItem(int id);
+
+	Item updateItem(Item item, Item newItem, Category category) throws Exception;
+
+	void deleteItem(Item item) throws Exception;
+
+	void deactivateItem(Item item) throws Exception;
+
+	List<Item> getItemsForCategory(List<Integer> cIds, String limit, String offset, boolean includeInactive) throws Exception;
+
+	List<Item> findAllActiveItems();
+
+	List<Item> getAllItems(String limit, String offset) throws Exception;
 
 }

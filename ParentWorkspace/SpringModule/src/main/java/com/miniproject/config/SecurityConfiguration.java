@@ -25,6 +25,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private SecurityFilter securityFilter;
 	
+	@Autowired
+	private AdminFilter adminFilter;
+	
 	/* 
 	 * overrides spring default /login authentication.
 	 */
@@ -41,6 +44,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	    registration.setFilter(securityFilter);
 	    registration.addUrlPatterns("/user/*");
 	    registration.addUrlPatterns("/order/*");
+	    return registration;
+	}
+	
+	@Bean
+	public FilterRegistrationBean<AdminFilter> AdminFilterRegistration() {
+	    FilterRegistrationBean<AdminFilter> registration = new  FilterRegistrationBean<AdminFilter>();
+	    registration.setFilter(adminFilter);
 	    registration.addUrlPatterns("/item/*");
 	    return registration;
 	}

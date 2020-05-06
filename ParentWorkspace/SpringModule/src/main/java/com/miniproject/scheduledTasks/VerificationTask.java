@@ -23,13 +23,13 @@ import com.miniproject.util.LogUtil;
 public class VerificationTask implements ScheduledTask {
 
 	@Autowired
-	VerificationService verificationService;
+	private VerificationService verificationService;
 
 	//cron = sec min hour day mon dayOfWeek year.
 	@Scheduled(cron = " 0 0/5 * * * * ")
 	@Override
 	public void execute() {
-		LogUtil.getLogger().info("Scheduled Task Executed : " + new Date());
+		LogUtil.getLogger().info(VerificationTask.class.getName() + "Scheduled Task Executed : " + new Date());
 		List<Verification> verificationList = verificationService.getAllVerifications();
 		if (!CollectionUtils.isEmpty(verificationList)) {
 			verificationList.stream().forEach(item -> {

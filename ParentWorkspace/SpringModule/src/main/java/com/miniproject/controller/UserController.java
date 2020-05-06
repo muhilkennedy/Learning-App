@@ -71,9 +71,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/getCartItems", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GenericResponse<Map> getCartItems(@RequestParam(value = "email", required = false) String email,
+	public GenericResponse<String> getCartItems(@RequestParam(value = "email", required = false) String email,
 											 HttpServletRequest request) {
-		GenericResponse<Map> response = new GenericResponse<>();
+		GenericResponse<String> response = new GenericResponse<>();
 		try {
 			if (email == null) {
 				email = jwtTokenUtil.getUserEmailFromToken(request.getHeader(HttpHeaders.AUTHORIZATION));
@@ -81,8 +81,39 @@ public class UserController {
 			User user = userService.findUser(email);
 			if (user != null) {
 				Map<Integer, Integer> itemQuantityMap = userService.getCartForUser(user.getUserId());
-				response.setData(itemQuantityMap);
-				response.setDataList(itemService.getItems(Lists.newArrayList(itemQuantityMap.keySet()), null, null));
+				response.setDataList(ResponseUtil.convertToCartResponse(
+						itemService.getItems(Lists.newArrayList(itemQuantityMap.keySet())), itemQuantityMap));
+				response.setStatus(Response.Status.OK);
+			} else {
+				List<String> msg = Arrays.asList("User Does Not Exist");
+				response.setErrorMessages(msg);
+				response.setStatus(Response.Status.NO_CONTENT);
+			}
+		} catch (Exception ex) {
+			LogUtil.getLogger().error("getUserData : " + ex);
+			List<String> msg = Arrays.asList(ex.getMessage());
+			response.setErrorMessages(msg);
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+
+	}
+	
+	@RequestMapping(value = "/removeCartItem", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public GenericResponse<String> removeCartItem(@RequestParam(value = "email", required = false) String email,
+												  @RequestParam(value = "itemId", required = true) int itemId,
+											      HttpServletRequest request) {
+		GenericResponse<String> response = new GenericResponse<>();
+		try {
+			if (email == null) {
+				email = jwtTokenUtil.getUserEmailFromToken(request.getHeader(HttpHeaders.AUTHORIZATION));
+			}
+			User user = userService.findUser(email);
+			if (user != null) {
+				userService.deleteCartItem(user.getUserId(), itemId);
+				Map<Integer, Integer> itemQuantityMap = userService.getCartForUser(user.getUserId());
+				response.setDataList(ResponseUtil.convertToCartResponse(
+						itemService.getItems(Lists.newArrayList(itemQuantityMap.keySet())), itemQuantityMap));
 				response.setStatus(Response.Status.OK);
 			} else {
 				List<String> msg = Arrays.asList("User Does Not Exist");
@@ -101,7 +132,7 @@ public class UserController {
 
 	@RequestMapping(value = "/insertItemInCart", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<User> insertItemInCart(@RequestParam(value = "email", required = false) String email,
-			@RequestBody List<Cart> cartItems,
+			@RequestBody Cart cartItems,
 			HttpServletRequest request) {
 		GenericResponse<User> response = new GenericResponse<>();
 		try {
@@ -126,7 +157,5 @@ public class UserController {
 		}
 		return response;
 	}
-	
-	
 	
 }

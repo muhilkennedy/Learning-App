@@ -27,6 +27,16 @@ public class ItemServiceImpl implements ItemService {
 	public Item findItem(int id) {
 		return itemRepo.findItem(id);
 	}
+	
+	@Override
+	public Item findActiveItem(int id) {
+		return itemRepo.findActiveItem(id);
+	}
+	
+	@Override
+	public List<Item> findAllActiveItems() {
+		return itemRepo.findAllActiveItems();
+	}
 
 	@Override
 	@Transactional
@@ -44,8 +54,20 @@ public class ItemServiceImpl implements ItemService {
 	}
 	
 	@Override
-	public List<Item> getItems(List<Integer> cIds, String limit, String offset) throws Exception{
-		List<Integer> cIdToFetch = itemDao.getItemIds(cIds, limit, offset);
+	public List<Item> getItems(List<Integer> itemIds) throws Exception {
+		List<Item> items = new ArrayList<>();
+		itemIds.parallelStream().forEach(itemId -> {
+			Item it = findActiveItem(itemId);
+			if(it!=null) {
+				items.add(it);
+			}
+		});
+		return items;
+	}
+	
+	@Override
+	public List<Item> getItemsForCategory(List<Integer> cIds, String limit, String offset, boolean includeInactive) throws Exception{
+		List<Integer> cIdToFetch = itemDao.getItemIds(cIds, limit, offset, includeInactive);
 		List<Item> items = new ArrayList<>();
 		cIdToFetch.parallelStream().forEach(cid -> {
 			Item tempItem = itemRepo.findItem(cid);
@@ -53,5 +75,46 @@ public class ItemServiceImpl implements ItemService {
 				items.add(tempItem);
 		});
 		return items;
+	}
+	
+	@Override
+	public List<Item> getAllItems(String limit, String offset) throws Exception{
+		List<Integer> cIdToFetch = itemDao.getItemIds(limit, offset);
+		List<Item> items = new ArrayList<>();
+		cIdToFetch.stream().forEach(cid -> {
+			Item tempItem = itemRepo.findItem(cid);
+			if(tempItem != null)
+				items.add(tempItem);
+		});
+		return items;
+	}
+	
+	@Override
+	@Transactional
+	public void deactivateItem (Item item) throws Exception {
+		item.setActive(false);
+		save(item);
+	}
+	
+	/*
+	 * Always soft delete item.
+	 */
+	@Override
+	@Transactional
+	public void deleteItem (Item item) throws Exception {
+		item.setActive(false);
+		item.setDeleted(true);
+		save(item);
+	}
+	
+	@Override
+	@Transactional
+	public Item updateItem (Item item, Item newItem, Category category) throws Exception {
+		item.setActive(false);
+		save(item);
+		newItem.setActive(true);
+		newItem.setcId(category);
+		save(newItem);
+		return newItem;
 	}
 }

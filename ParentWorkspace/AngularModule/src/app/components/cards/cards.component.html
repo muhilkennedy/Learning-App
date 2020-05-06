@@ -1,19 +1,21 @@
 <div class="row">
-  <div class="column" *ngFor="let c of count">
+  <div class="column" *ngFor="let card of cards">
     <div class="card">
       <mat-card class="example-card">
         <mat-card-header>
-          <!-- <div mat-card-avatar class="example-header-image"></div> -->
-          <mat-card-title>Cashew</mat-card-title>
-          <mat-card-subtitle>Fried</mat-card-subtitle>
+          <!-- <button mat-icon-button class="example-header-image">
+            <mat-icon>zoom_out_map</mat-icon>
+          </button> -->
+          <mat-card-title>{{card.itemName}}</mat-card-title>
+          <mat-card-subtitle>{{card.categoryName}}</mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image src="http://cajuco.com/wp-content/uploads/2014/12/bag_of_cashews-1014x487.jpg" alt="Photo of a Shiba Inu">
+        <img (click)="viewFullImage(card)" class="imgClass" mat-card-image src={{card.image}} alt="No Photo">
         <mat-card-content>
-          <h3>Brand Name</h3>
-          <span style="color: green;"><b>800</b> INR/kg</span> - <span style="color: brown">10% flat on <b>1000</b> INR/kg</span>
+          <h3>{{card.brandName | allCaps}}</h3>
+          <span style="color: green;"><b>{{card.cost}}</b> INR/{{card.measure}} </span> - <span *ngIf="card.offer!=null" style="color: brown">{{card.offer}} flat OFF</span>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button>
+          <button mat-button (click)="addToCart(card)">
             <mat-icon>add_shopping_cart</mat-icon>
             Add to Cart
           </button>
@@ -21,4 +23,14 @@
       </mat-card>
     </div>
   </div>
+</div>
+
+<!-- Overlay image on webpage for full view (modal images)-->
+<div #parent  class="modal">
+  <!-- The Close Button -->
+  <span (click)="closeImageOverview()" class="close">&times;</span>
+  <!-- Modal Content (The Image) -->
+  <img #image class="modal-content" src={{modalImageContent}}>
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption">{{modalImageCaption}}</div>
 </div>

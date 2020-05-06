@@ -13,6 +13,7 @@ public class CommonUtil {
 	public static final String Key_internalUser = "INTERNAL";
 	public static final int saltRounds = 5;
 	public static final int maxVerificationTime = 1;
+	public static final int maxCategoryRemovalTime = 6;
 	private static final int randomCodeLength = 8;
 	private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
 	public static final String verificationPath = "/verifyUser";
@@ -27,6 +28,7 @@ public class CommonUtil {
 	
 	public static final String Header_Limit = "Limit";
 	public static final String Header_Offset = "Offset";
+	public static final String Header_Scope = "Scope";
 
 	public static boolean isNullOrEmptyString(String value) {
 		if (value != null && !(value.length() <= 0))
