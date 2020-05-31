@@ -50,6 +50,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AllCapsPipe } from './shared/pipes/all-caps.pipe';
 import { RedirectComponent } from './components/redirect/redirect.component';
 import { CardsComponent } from './components/cards/cards.component';
+import { CartComponent, cartBottomSheet } from './shared/components/cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,9 @@ import { CardsComponent } from './components/cards/cards.component';
     DialogOverviewComponent,
     AllCapsPipe,
     RedirectComponent,
-    CardsComponent
+    CardsComponent,
+    CartComponent,
+    cartBottomSheet
   ],
   imports: [
     BrowserModule,
@@ -113,7 +116,7 @@ import { CardsComponent } from './components/cards/cards.component';
       tertiaryColour: 'brown'
   })
   ],
-  entryComponents: [ LoginDialogComponent, DialogOverviewComponent],
+  entryComponents: [ LoginDialogComponent, DialogOverviewComponent, cartBottomSheet],
   providers: [ CookieService ],
   bootstrap: [AppComponent]
 })

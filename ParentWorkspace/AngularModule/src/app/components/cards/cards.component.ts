@@ -62,7 +62,7 @@ export class CardsComponent implements OnInit {
 
   addToCart(item:any){
     if(this.user.token != null && this.cookieService.get("userId") != null){
-      let cartItem = { itemId: item.itemId, itemName: item.itemName, quantity: 1 };
+      let cartItem = { itemId: item.itemId, itemName: item.itemName, quantity: 1 , cost: item.cost};
       let itemExisting = false;
       // identify if the item is present in cart already and increment values likewise.
       this.user.cartItems.forEach(function(itemValue){
@@ -74,21 +74,21 @@ export class CardsComponent implements OnInit {
       });
       if(!itemExisting)
         this.user.cartItems.push(cartItem);
-      let removeFromCart = false;
-      this.cartService.addCartForUser(cartItem)
-          .subscribe((response:any)=>{
-            if(response.statusCode === 200){
-              console.log("added to cart successfully!");
-            }
-            else{
-              //reset cart item
+        let removeFromCart = false;
+        this.cartService.addCartForUser(cartItem)
+            .subscribe((response:any)=>{
+              if(response.statusCode === 200){
+                console.log("added to cart successfully!");
+              }
+              else{
+                //reset cart item
+                this.removeFromCartArray(cartItem);
+              }
+            },
+            (error)=>{
+              alert("Failed to add items to cart");
               this.removeFromCartArray(cartItem);
-            }
-          },
-          (error)=>{
-            alert("Failed to add items to cart");
-            this.removeFromCartArray(cartItem);
-          });
+            });
     }
     else{
       alert("please login to add to cart!")

@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 export interface cart{
   itemId:number,
   itemName:string,
-  quantity:number
+  quantity:number,
+  cost:number
 }
 
 @Injectable({

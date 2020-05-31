@@ -11,10 +11,7 @@
     </div>
     <!-- fill up spaces in-between -->
     <span class="spacer"></span>
-    <button mat-button (click)="cart()" matBadge={{this.userSerive.cartItems.length}} matBadgePosition="before">
-      <mat-icon>shopping_cart</mat-icon>
-      cart
-    </button>
+    <app-cart></app-cart>
     <span class="menu-spacer"></span>
     <app-login-dialog></app-login-dialog>
   </mat-toolbar-row>

@@ -2,6 +2,7 @@ package com.miniproject.controller;
 
 import java.io.File;
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -84,17 +85,34 @@ public class CommonController {
 
 	@RequestMapping(value = "/getItem", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<ItemResponse> getInvoice(
-			@RequestParam(value = "itemId", required = true) String itemId, HttpServletRequest request) {
+			@RequestParam(value = "itemId", required = true) List<String> itemId, HttpServletRequest request) {
 		GenericResponse<ItemResponse> response = new GenericResponse<>();
 		try {
-			Item item = itemService.findItem(Integer.parseInt(itemId));
-			if(item != null) {
-				response.setData(ResponseUtil.convertItemModelToItemResponse(item));
+			if(itemId.isEmpty()) {
+				response.setErrorMessages(Arrays.asList("Param ItemId is Empty!"));
+				response.setStatus(Response.Status.BAD_REQUEST);
+			}
+			if(itemId.size() > 1) {
+				List<Item> itemList= new ArrayList<>();
+				for(String id: itemId) {
+					Item item = itemService.findItem(Integer.parseInt(id));
+					if(item != null) {
+						itemList.add(item);
+					}
+				}
+				response.setDataList(ResponseUtil.convertItemModelToItemResponse(itemList));
 				response.setStatus(Response.Status.OK);
 			}
 			else {
-				response.setErrorMessages(Arrays.asList("Item not found"));
-				response.setStatus(Response.Status.NO_CONTENT);
+				Item item = itemService.findItem(Integer.parseInt(itemId.get(0)));
+				if(item != null) {
+					response.setData(ResponseUtil.convertItemModelToItemResponse(item));
+					response.setStatus(Response.Status.OK);
+				}
+				else {
+					response.setErrorMessages(Arrays.asList("Item not found"));
+					response.setStatus(Response.Status.NO_CONTENT);
+				}
 			}
 		} catch (Exception ex) {
 			LogUtil.getLogger().error("getInvoice : " + ex);
