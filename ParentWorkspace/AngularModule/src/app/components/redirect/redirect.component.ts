@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/shared/services/login.service';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from 'src/app/shared/services/user.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-redirect',
@@ -13,17 +14,16 @@ export class RedirectComponent implements OnInit {
   loading:boolean = true;
 
   constructor(private loginService:LoginService, private user:UserService,
-    private cookieService: CookieService) { }
+    private cookieService: CookieService, private snackBar: MatSnackBar) { }
+    
 
   ngOnInit() {
-    console.log("inside redirect");
     let url: String = window.location.href;
     let token:string = this.getParamValueQueryString('token',url);
     this.loginService.getUserDetailFromToken(token)
         .subscribe(
           (response)=>{
             if(response.statusCode == 200){
-              console.log("Success");
               let userData:any = response.data;
               this.cookieService.set("userName", userData.firstName);
               this.cookieService.set("userId", userData.userId);
@@ -35,10 +35,12 @@ export class RedirectComponent implements OnInit {
           },
           (error) => {
             this.loading = false;
-            alert("something went wrong!");
+            this.snackBar.open("Failed to Redirect to Destination", "ERROR", {
+              duration: 20000,
+            });
           }
         );
-        this.sleep(3000);
+        this.sleep(5000);
   }
 
   getParamValueQueryString( paramName , url) {

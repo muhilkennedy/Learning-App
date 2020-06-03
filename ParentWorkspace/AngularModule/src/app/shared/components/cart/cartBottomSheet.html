@@ -1,0 +1,47 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<table style="width: -webkit-fill-available; text-align: center;">
+  <tr>
+    <th>
+      Item Name
+    </th>
+    <th>
+      Quantity
+    </th>
+    <th>
+      Cost
+    </th>
+    <th>
+      Actions
+    </th>
+  </tr>
+  <tr *ngFor="let item of cartItems">
+    <td>
+      <label>{{item.itemName}}</label>
+    </td>
+    <td>
+      <label>{{item.quantity}}</label>
+    </td>
+    <td>
+      <label>{{item.cost}}</label>
+    </td>
+    <td>
+      <button mat-mini-fab style="background-color: darkgreen;" (click)="incrementItem(item)">
+        <mat-icon>add_circle_outline</mat-icon>
+      </button>   
+      <button mat-mini-fab style="background-color: darkgreen;" *ngIf="toggleDelete(item)" (click)="decrementItem(item)">
+        <mat-icon>remove_circle_outline</mat-icon>
+      </button>
+      <button mat-mini-fab style="background-color: red;" *ngIf="!toggleDelete(item)" (click)="removeItem(item)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </tr>
+</table>
+
+
+<button mat-button style="background-color: indianred; width: 50%;" (click)="clearCart()">
+  <mat-icon>clear_all</mat-icon>Clear Cart
+</button>
+<button mat-button style="background-color: darkorange; width: 50%" (click)="checkOutCart()">
+  <mat-icon>shopping_cart</mat-icon>Checkout Items
+</button>

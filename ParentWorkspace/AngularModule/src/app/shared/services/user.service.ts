@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 export interface cart{
   itemId:number,
   itemName:string,
-  quantity:number
+  quantity:number,
+  cost:number
 }
 
 @Injectable({
@@ -38,6 +39,18 @@ export class UserService {
     this.lastName = lastName;
     this.loginVia = loginVia;
     this.active = active;
+  }
+
+  public resetData(){
+    this.userId = -1;
+    this.emailId = '';
+    this.mobile = '';
+    this.role = '';
+    this.firstName = '';
+    this.lastName = '';
+    this.loginVia = '';
+    this.active = false;
+    this.cartItems = [];
   }
 
 }

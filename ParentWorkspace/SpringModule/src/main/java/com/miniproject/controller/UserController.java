@@ -101,16 +101,27 @@ public class UserController {
 	
 	@RequestMapping(value = "/removeCartItem", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericResponse<String> removeCartItem(@RequestParam(value = "email", required = false) String email,
-												  @RequestParam(value = "itemId", required = true) int itemId,
+												  @RequestParam(value = "itemId", required = true) List<String> itemId,
 											      HttpServletRequest request) {
 		GenericResponse<String> response = new GenericResponse<>();
 		try {
+			if(itemId.isEmpty()) {
+				response.setStatus(Response.Status.BAD_REQUEST);
+				return response;
+			}
 			if (email == null) {
 				email = jwtTokenUtil.getUserEmailFromToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 			}
 			User user = userService.findUser(email);
 			if (user != null) {
-				userService.deleteCartItem(user.getUserId(), itemId);
+				if(itemId.size() > 1) {
+					for(String id: itemId) {
+						userService.deleteCartItem(user.getUserId(), Integer.parseInt(id));
+					}
+				}
+				else {
+					userService.deleteCartItem(user.getUserId(), Integer.parseInt(itemId.get(0)));
+				}
 				Map<Integer, Integer> itemQuantityMap = userService.getCartForUser(user.getUserId());
 				response.setDataList(ResponseUtil.convertToCartResponse(
 						itemService.getItems(Lists.newArrayList(itemQuantityMap.keySet())), itemQuantityMap));
