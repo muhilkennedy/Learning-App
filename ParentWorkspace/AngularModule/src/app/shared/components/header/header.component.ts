@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +15,7 @@ export class HeaderComponent implements OnInit {
 
   itemCount : number ;
 
-  constructor(private cookieService:CookieService, public userSerive: UserService) { }
+  constructor(private cookieService:CookieService, public userSerive: UserService, private router: Router) { }
 
   ngOnInit() {
     this.username = '';
@@ -22,11 +23,7 @@ export class HeaderComponent implements OnInit {
     this.itemCount = this.userSerive.cartItems.length;
   }
 
-  toggle(){
-    
-  }
-
-  cart(){
-    
+  takeMeHome(){
+    this.router.navigate(['/home']);
   }
 }
