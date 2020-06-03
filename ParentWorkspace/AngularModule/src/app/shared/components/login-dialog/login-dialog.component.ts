@@ -50,8 +50,11 @@ export class LoginDialogComponent implements OnInit {
   logout(){
     this.username = '';
     this.user.resetData();
+    let appName = this.cookieService.get("appName");
+    //clear cookies
     this.cookieService.deleteAll();
-    //location.reload();
+    //reset appname
+    this.cookieService.set("appName", appName);
   }
 
 }

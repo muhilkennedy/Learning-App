@@ -51,6 +51,7 @@ import { AllCapsPipe } from './shared/pipes/all-caps.pipe';
 import { RedirectComponent } from './components/redirect/redirect.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { CartComponent, cartBottomSheet } from './shared/components/cart/cart.component';
+import { OrderItemsComponent } from './components/order-items/order-items.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { CartComponent, cartBottomSheet } from './shared/components/cart/cart.co
     RedirectComponent,
     CardsComponent,
     CartComponent,
-    cartBottomSheet
+    cartBottomSheet,
+    OrderItemsComponent
   ],
   imports: [
     BrowserModule,

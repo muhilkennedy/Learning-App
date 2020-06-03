@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { CartService } from '../../services/cart.service';
 import { CardsService } from '../../services/cards.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -39,7 +40,8 @@ export class cartBottomSheet {
     public user: UserService,
     private cartService: CartService,
     private cardService: CardsService,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private router: Router) {
     this.cartItems = this.user.cartItems;
     this.loading = true;
     let itemIds = [];
@@ -68,10 +70,9 @@ export class cartBottomSheet {
         });
   }
 
-  // openLink(event: MouseEvent): void {
-  //   this._bottomSheetRef.dismiss();
-  //   event.preventDefault();
-  // }
+  closeBottomSheet(): void {
+    this._bottomSheetRef.dismiss();
+  }
 
   //Complexity is high of n2. need to be modified for performance improvement later.
   updateCost(){
@@ -169,21 +170,36 @@ export class cartBottomSheet {
   }
 
   clearCart() {
-    this.cartService.clearCart()
-      .subscribe((response: any) => {
-        console.log('user cart cleared!');
-      },
-        (error) => {
-          this.snackBar.open("Failed to clear Items", "ERROR", {
-            duration: 10000,
+    if(this.user.cartItems.length > 0){
+      this.cartService.clearCart()
+        .subscribe((response: any) => {
+          console.log('user cart cleared!');
+        },
+          (error) => {
+            this.snackBar.open("Failed to clear Items", "ERROR", {
+              duration: 10000,
+            });
           });
-        });
-    //clear user cart
-    this.user.cartItems = [];
-    this.cartItems = [];
+      //clear user cart
+      this.user.cartItems = [];
+      this.cartItems = [];
+    }
+    else{
+      this.snackBar.open("Cart is Empty", "WARN", {
+        duration: 3000
+      });
+    }
   }
 
   checkOutCart(){
-    
+    if(this.user.cartItems.length > 0){
+      this.closeBottomSheet();
+      this.router.navigate(['/orderItem']);
+    }
+    else{
+      this.snackBar.open("Cart is Empty", "WARN", {
+        duration: 3000,
+      });
+    }
   }
 }

@@ -1,0 +1,30 @@
+<app-header></app-header>
+
+<mat-horizontal-stepper linear #stepper  style="background: antiquewhite !important;">
+  <mat-step [editable]="reviewOrderEditable">
+      <ng-template matStepLabel>Review Items</ng-template>
+      <button mat-button matStepperNext>Next</button>
+  </mat-step>
+  <mat-step [editable]="deliveryInfoEditable">
+      <ng-template matStepLabel>Delivery Information</ng-template>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+  </mat-step>
+  <mat-step [editable]="false" disable="true">
+    <ng-template matStepLabel>Payment</ng-template>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+  <mat-step [editable]="orderStatusEditable">
+    <ng-template matStepLabel>Order Status</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
