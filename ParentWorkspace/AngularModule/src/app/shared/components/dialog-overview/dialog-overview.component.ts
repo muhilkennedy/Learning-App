@@ -4,6 +4,7 @@ import { LoginService } from '../../services/login.service';
 import { UserService } from '../../services/user.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CartService } from '../../services/cart.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dialog-overview',
@@ -41,7 +42,8 @@ export class DialogOverviewComponent implements OnInit {
     private cookieService: CookieService,
     private cartService: CartService,
     public dialogRef: MatDialogRef<DialogOverviewComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: null) {}
+    @Inject(MAT_DIALOG_DATA) public data: null,
+    private snackBar: MatSnackBar) {}
 
   ngOnInit() {
   }
@@ -81,7 +83,9 @@ export class DialogOverviewComponent implements OnInit {
                     }
                   },
                   (error)=>{
-                    alert("Failed to load cart Items");
+                    this.snackBar.open("Failed to Fetch Cart Items", "ERROR", {
+                      duration: 10000,
+                    });
                   });
               this.dialogRef.close();
             }
@@ -92,8 +96,10 @@ export class DialogOverviewComponent implements OnInit {
             this.loading = false;
           },
           (error)=>{
-            alert("something went wrong!");
-            console.log("Connection to Backend Failed");
+            this.snackBar.open("Login Failed! Something Unexpected Happened", "ERROR", {
+              duration: 10000,
+            });
+            console.log("Login Failed");
             this.dialogRef.close();
           });
     }
@@ -107,7 +113,9 @@ export class DialogOverviewComponent implements OnInit {
           }
         },
         (error)=>{
-          alert("somthing went wrong");
+          this.snackBar.open("Something went wrong", "ERROR", {
+            duration: 10000,
+          });
         });
   }
 
@@ -169,18 +177,23 @@ export class DialogOverviewComponent implements OnInit {
     this.loginService.createuser(body)
         .subscribe((response:any)=>{
           if(response.statusCode == 200){
-            //snack-bars from angular material has to be implemented.
-            alert("user creation successfull!")
+            this.snackBar.open("USER creation Successful", "OK", {
+              duration: 3000,
+            });
           }
           else{
-            alert("user creation failed!");
+            this.snackBar.open("USER creation Failed", "WARN", {
+              duration: 3000,
+            });
           }
           this.loading = false;
           this.isSignUpDialog = false;
           this.isSignInDialog = true;
         },
         (error)=>{
-          alert("user creation failed!");
+          this.snackBar.open("USER creation Failed", "ERROR", {
+            duration: 10000,
+          });
         });
   }
 
@@ -200,12 +213,16 @@ export class DialogOverviewComponent implements OnInit {
           this.tempVariable = this.forget_email.nativeElement.value;
         }
         else{
-          alert("sending email failed");
+          this.snackBar.open("Failed to send Email", "WARN", {
+            duration: 10000,
+          });
         }
         this.loading = false;
       },
       (error)=>{
-        alert("somthing went wrong");
+        this.snackBar.open("Failed to send Email", "ERROR", {
+          duration: 10000,
+        });
       });
   }
 
@@ -235,12 +252,16 @@ export class DialogOverviewComponent implements OnInit {
           this.isSignInDialog = true;
         }
         else{
-          alert("verification failed");
+          this.snackBar.open("USER Verification Failed", "ERROR", {
+            duration: 10000,
+          });
         }
         this.loading = false;
       },
       (error)=>{
-        alert("something went wrong");
+        this.snackBar.open("USER verification failed", "ERROR", {
+          duration: 10000,
+        });
       });
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import { DialogOverviewComponent } from '../dialog-overview/dialog-overview.component';
 import { UserService } from '../../services/user.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -49,9 +49,9 @@ export class LoginDialogComponent implements OnInit {
 
   logout(){
     this.username = '';
-    this.user = null;
+    this.user.resetData();
     this.cookieService.deleteAll();
-    location.reload();
+    //location.reload();
   }
 
 }

@@ -41,4 +41,16 @@ export class UserService {
     this.active = active;
   }
 
+  public resetData(){
+    this.userId = -1;
+    this.emailId = '';
+    this.mobile = '';
+    this.role = '';
+    this.firstName = '';
+    this.lastName = '';
+    this.loginVia = '';
+    this.active = false;
+    this.cartItems = [];
+  }
+
 }

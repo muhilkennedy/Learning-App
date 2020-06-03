@@ -3,6 +3,7 @@ import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-shee
 import { UserService } from '../../services/user.service';
 import { CartService } from '../../services/cart.service';
 import { CardsService } from '../../services/cards.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cart',
@@ -37,7 +38,8 @@ export class cartBottomSheet {
   constructor(private _bottomSheetRef: MatBottomSheetRef<cartBottomSheet>,
     public user: UserService,
     private cartService: CartService,
-    private cardService: CardsService) {
+    private cardService: CardsService,
+    private snackBar: MatSnackBar) {
     this.cartItems = this.user.cartItems;
     this.loading = true;
     let itemIds = [];
@@ -59,7 +61,9 @@ export class cartBottomSheet {
         this.loading = false;
       },
         (error) => {
-          alert("Failed to load cart Items");
+          this.snackBar.open("Failed to load Cart Items", "ERROR", {
+            duration: 10000,
+          });
           this.loading = false;
         });
   }
@@ -136,7 +140,9 @@ export class cartBottomSheet {
         }
       },
         (error) => {
-          alert("Failed to load cart Items");
+          this.snackBar.open("Failed to load Cart Items", "ERROR", {
+            duration: 10000,
+          });
         });
   }
 
@@ -155,7 +161,9 @@ export class cartBottomSheet {
         }
       },
         (error) => {
-          alert("Failed to load cart Items");
+          this.snackBar.open("Failed to load Cart Items", "ERROR", {
+            duration: 10000,
+          });
         });
     this.updateCost();
   }
@@ -166,7 +174,9 @@ export class cartBottomSheet {
         console.log('user cart cleared!');
       },
         (error) => {
-          alert("Failed to load cart Items");
+          this.snackBar.open("Failed to clear Items", "ERROR", {
+            duration: 10000,
+          });
         });
     //clear user cart
     this.user.cartItems = [];
